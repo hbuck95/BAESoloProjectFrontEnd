@@ -1,11 +1,8 @@
 const path = "/champion";
 let selectedChampion;
 
-
-
-
+//Execute when script has loaded
 getAllChampions();
-
 
 function getAllChampions() {
     const location = "/getAllChampions"
@@ -21,7 +18,33 @@ function getAllChampions() {
         );
 }
 
+async function displayChampion() {
+    id = (document.getElementById("search-box").value);
+    const location = `/getChampion/${id}`;
+
+    //If no id is entered default to get all champions
+    if(id == ""){
+        getAllChampions();
+        return;
+    }
+
+    champ = await makeRequest("GET", path + location, "")
+        .then(data => {
+            return data;
+        })
+        .catch(error => {
+            console.log(error);
+        }
+        );
+
+
+    displayData(champ);
+}
+
 function getChampion(id) {
+
+    id = id === undefined ? document.getElementById("search-box").value : id;
+
     const location = `/getChampion/${id}`;
     console.log("Get champion");
 
@@ -59,12 +82,11 @@ function editRecord(id) {
 function deleteRecord(id) {
     const location = `/deleteChampion/${id}`;
 
-
-    if(!window.confirm("Are you sure you want to delete this record?")){
+    if (!window.confirm("Are you sure you want to delete this record?")) {
         return;
     }
 
-    makeRequest("DELETE", path+location, "")
+    makeRequest("DELETE", path + location, "")
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -111,6 +133,7 @@ function updateRecord() {
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
+            window.location.reload();
         })
         .catch(error => {
             console.log(error);

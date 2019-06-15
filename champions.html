@@ -10,28 +10,39 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>SMITE - Champions</title>
 </head>
 
 <body>
-    <h1>Hello, world!</h1>
+    <h1>Champions</h1>
+
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="search-box" placeholder="Search by id (e.g. '1')">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" onclick="displayChampion()" type="button"
+                id="button-addon2">Search</button>
+                <button class="btn btn-outline-secondary"onclick="getAllChampions()" type="button">View All</button>
+        </div>
+    </div>
 
     <div id="container">
-        <table class="table" id="data-table">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Pantheon</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Damage Type</th>
-                    <th scope="col">Base Health</th>
-                    <th scope="col">Base Damage</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <div id="data-table">
+            <table class="table" id="tbl">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Pantheon</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Damage Type</th>
+                        <th scope="col">Base Health</th>
+                        <th scope="col">Base Damage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Toggle modal with button attrbutes: data-toggle="modal" data-target="#myModal". No onclick method needed -->

@@ -24,14 +24,15 @@ function displayData(data) {
     let entity = []; //Reset this variable
 
     let parsedData = JSON.parse(data); //Convert the json data to an object
-    let table = document.getElementById("data-table");
+    let table = document.getElementById("tbl");
 
     //If the JSON is an array (more than 1 record) join the arrays otherwise push the record into the array
     Array.isArray(parsedData) ? entity = entity.concat(parsedData) : entity.push(parsedData);
 
     //If the table already exists remove it
     if (!!table) {
-        document.getElementById("container").removeChild(table);
+        console.log("table exists");
+        document.getElementById("data-table").removeChild(table);
     }
 
     //Set up the initial table
@@ -54,7 +55,7 @@ function displayData(data) {
     head.appendChild(headCell);
 
     //Attach the table to the document
-    document.getElementById("container").appendChild(table);
+    document.getElementById("data-table").appendChild(table);
 
     //Start appending the data
     let body = table.createTBody();

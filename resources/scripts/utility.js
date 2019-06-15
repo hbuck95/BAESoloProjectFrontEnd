@@ -19,7 +19,7 @@ async function makeRequest(method, url, body) {
     });
 }
 
-function displayData(data) {
+function displayData(data, delFunc, upFunc, newFunc) {
     console.log("Displaying data");
     let entity = []; //Reset this variable
 
@@ -28,6 +28,8 @@ function displayData(data) {
 
     //If the JSON is an array (more than 1 record) join the arrays otherwise push the record into the array
     Array.isArray(parsedData) ? entity = entity.concat(parsedData) : entity.push(parsedData);
+
+    entity.sort(function(a,b){return a.id - b.id});
 
     //If the table already exists remove it
     if (!!table) {
@@ -53,6 +55,17 @@ function displayData(data) {
     let headCell = document.createElement("th");
     headCell.innerHTML = "<b>Actions</b>";
     head.appendChild(headCell);
+
+    let newBtn = document.createElement("button");
+    headCell = document.createElement("th");
+    newBtn.setAttribute("class", "btn btn-primary new-btn");
+    newBtn.setAttribute("id", "new-btn");
+    newBtn.innerHTML = "New Record";
+    newBtn.setAttribute("data-toggle", "modal");
+    newBtn.setAttribute("data-target", "#newRecord");
+    newBtn.setAttribute("onclick", `${newFunc}()`);
+    headCell.append(newBtn);
+    head.append(headCell);
 
     //Attach the table to the document
     document.getElementById("data-table").appendChild(table);
@@ -93,6 +106,9 @@ function displayData(data) {
         cell = row.insertCell();
         cell.setAttribute("id", element["id"]);
 
+        if (data.includes("message"))
+            return;
+
 
         let editBtn = document.createElement("button");
         editBtn.setAttribute("class", "btn btn-outline-info edit-btn");
@@ -108,11 +124,12 @@ function displayData(data) {
         cell.append(editBtn);
         cell.append(document.createTextNode(" "));
         cell.append(delBtn);
-        editBtn.setAttribute("onclick", `editRecord(${editBtn.parentElement.id});`);
+        cell.setAttribute("colspan", "2");
+        editBtn.setAttribute("onclick", `${upFunc}(${editBtn.parentElement.id});`);
         editBtn.setAttribute("data-toggle", "modal");
         editBtn.setAttribute("data-target", "#myModal");
 
-        delBtn.setAttribute("onclick", `deleteRecord(${delBtn.parentElement.id})`);
+        delBtn.setAttribute("onclick", `${delFunc}(${delBtn.parentElement.id})`);
 
 
     });

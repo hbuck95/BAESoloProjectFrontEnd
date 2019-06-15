@@ -1,21 +1,25 @@
 const path = "/champion";
 let selectedChampion;
 
-//Execute when script has loaded
-getAllChampions();
-
-function getAllChampions() {
+async function getAllChampions(display = true) {
     const location = "/getAllChampions"
-    console.log("Get all champions");
+    let result = "";
 
-    makeRequest("GET", path + location, "")
+    await makeRequest("GET", path + location, "")
         .then(data => {
-            displayData(data);
+            if (display) {
+                displayData(data, "deleteChamp", "editChamp");
+            }
+            result = data;
+            return data;
         })
         .catch(error => {
             console.log(error);
         }
         );
+
+    return result;
+
 }
 
 async function displayChampion() {
@@ -23,7 +27,7 @@ async function displayChampion() {
     const location = `/getChampion/${id}`;
 
     //If no id is entered default to get all champions
-    if(id == ""){
+    if (id == "") {
         getAllChampions();
         return;
     }
@@ -38,7 +42,7 @@ async function displayChampion() {
         );
 
 
-    displayData(champ);
+    displayData(champ, "deleteChamp", "editChamp");
 }
 
 function getChampion(id) {
@@ -59,7 +63,7 @@ function getChampion(id) {
         );
 }
 
-function editRecord(id) {
+function editChamp(id) {
     let idInput = document.getElementById("id");
     let nameInput = document.getElementById("name");
     let hpInput = document.getElementById("hp");
@@ -81,17 +85,21 @@ function editRecord(id) {
 
         let pantheons = JSON.parse(panths);
 
-        for(let p of pantheons){
-            
-            let selection = document.createElement("option");        
-            selection.setAttribute("id", p.id);
-            selection.text = p.name;
-            pantheonSelector.add(selection);
+        if (pantheonSelector.options.length != pantheons.length) {
+            pantheonSelector.options.length = 0;
+
+            for (let p of pantheons) {
+
+                let selection = document.createElement("option");
+                selection.setAttribute("id", p.id);
+                selection.text = p.name;
+                pantheonSelector.add(selection);
+            }
         }
 
         //Select the current pantheon by default
-        for(let i = 0; i < pantheonSelector.options.length; i++){
-            if((pantheonSelector.options[i].text) === selectedChampion.pantheon.name){
+        for (let i = 0; i < pantheonSelector.options.length; i++) {
+            if ((pantheonSelector.options[i].text) === selectedChampion.pantheon.name) {
                 pantheonSelector.selectedIndex = i;
                 break;
             }
@@ -103,47 +111,59 @@ function editRecord(id) {
 
         let allRoles = JSON.parse(roles);
 
-        for(let r of allRoles){
-            let selection = document.createElement("option");
-            selection.setAttribute("id", r.id);
-            selection.text = r.name;
-            roleSelector.add(selection);
+        if (roleSelector.options.length != allRoles.length) {
+            roleSelector.options.length = 0;
+
+            for (let r of allRoles) {
+                let selection = document.createElement("option");
+                selection.setAttribute("id", r.id);
+                selection.text = r.name;
+                roleSelector.add(selection);
+            }
+
         }
 
-         //Select the current role by default
-         for(let i = 0; i < roleSelector.options.length; i++){
-            if((roleSelector.options[i].text) === selectedChampion.role.name){
+        //Select the current role by default
+        for (let i = 0; i < roleSelector.options.length; i++) {
+            if ((roleSelector.options[i].text) === selectedChampion.role.name) {
                 roleSelector.selectedIndex = i;
                 break;
             }
         }
-        
+
     });
 
     getDamageTypes(false).then(dmgs => {
 
         let dmgTypes = JSON.parse(dmgs);
 
-        for(let type of dmgTypes){
-            let selection = document.createElement("option");
-            selection.setAttribute("id", type.id);
-            selection.text = type.name;
-            damageSelector.add(selection);
+        if (damageSelector.options.length != dmgTypes.length) {
+            damageSelector.options.length = 0;
+
+            for (let type of dmgTypes) {
+                let selection = document.createElement("option");
+                selection.setAttribute("id", type.id);
+                selection.text = type.name;
+                damageSelector.add(selection);
+            }
         }
 
-         //Select the current role by default
-         for(let i = 0; i < damageSelector.options.length; i++){
-            if((damageSelector.options[i].text) === selectedChampion.damageType.name){
+        //Select the current role by default
+        for (let i = 0; i < damageSelector.options.length; i++) {
+            if ((damageSelector.options[i].text) === selectedChampion.damageType.name) {
                 damageSelector.selectedIndex = i;
                 break;
             }
         }
-        
+
     });
-  
+
+    document.getElementById("submit-btn").addEventListener("click", function () { updateChamp(); });
+
+
 }
 
-function deleteRecord(id) {
+function deleteChamp(id) {
     const location = `/deleteChampion/${id}`;
 
     if (!window.confirm("Are you sure you want to delete this record?")) {
@@ -154,8 +174,6 @@ function deleteRecord(id) {
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
-            toggleAccountForm("hidden");
-            resetForm();
         })
         .catch(error => {
             window.alert("You can't delete this record as there are stats that rely on it!\nPlease delete the stats associated with this champion first.");
@@ -164,7 +182,7 @@ function deleteRecord(id) {
 
 }
 
-function updateRecord() {
+function updateChamp() {
     let idInput = document.getElementById("id");
     let nameInput = document.getElementById("name");
     let hpInput = document.getElementById("hp");
@@ -173,12 +191,9 @@ function updateRecord() {
     let roleSelector = document.getElementById("role-selection");
     let damageSelector = document.getElementById("damage-selection");
 
-
-
     if (!window.confirm("Are you sure you want to update this record?")) {
         return;
     }
-
 
     const location = `/updateChampion/${idInput.value}`;
 

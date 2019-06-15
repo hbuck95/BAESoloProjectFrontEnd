@@ -19,7 +19,7 @@
     <div class="input-group mb-3">
         <input type="text" class="form-control" id="search-box" placeholder="Search by id (e.g. '1')">
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" onclick="displayChampion()" type="button"
+            <button class="btn btn-outline-secondary" onclick="displayStat()" type="button"
                 id="button-addon2">Search</button>
             <button class="btn btn-outline-secondary" onclick="getAllStats()" type="button">View All</button>
         </div>
@@ -65,48 +65,41 @@
                         <input type="text" id="id" class="form-control" placeholder="ID" readonly>
                     </div>
 
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Name:</span>
-                        </div>
-                        <input type="text" id="name" class="form-control" placeholder="Name">
-                    </div>
-
                     <div class="form-group">
-                        <label for="exampleFormControlSelect1">Role:</label>
-                        <select class="form-control" id="role-selection">
+                        <label for="exampleFormControlSelect1">Champion:</label>
+                        <select class="form-control" id="champion-selection">
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleFormControlSelect1">Pantheon:</label>
-                        <select class="form-control" id="pantheon-selection">
+                        <label for="exampleFormControlSelect1">Game Mode:</label>
+                        <select class="form-control" id="gamemode-selection">
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Damage Type:</label>
-                        <select class="form-control" id="damage-selection">
-                        </select>
-                    </div>
-
-
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Health:</span>
-                        </div>
-                        <input type="text" id="hp" class="form-control" placeholder="Health">
                     </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Damage:</span>
+                            <span class="input-group-text" id="basic-addon1">Win Rate:</span>
                         </div>
-                        <input type="text" id="damage" class="form-control" placeholder="Damage">
+                        <input type="text" id="winrate" class="form-control" placeholder="Win Rate">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Pick Rate:</span>
+                        </div>
+                        <input type="text" id="pickrate" class="form-control" placeholder="Pick Rate">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Ban Rate:</span>
+                        </div>
+                        <input type="text" id="banrate" class="form-control" placeholder="Ban Rate">
                     </div>
 
                     <br>
-                    <button type="button" class="btn btn-primary" onclick="updateRecord()">Submit</button>
+                    <button type="button" id="submit-btn" class="btn btn-primary">Submit</button>
 
 
 
@@ -120,6 +113,68 @@
         </div>
     </div>
 
+
+    <!-- Toggle modal with button attrbutes: data-toggle="modal" data-target="#myModal". No onclick method needed -->
+    <!-- Modal -->
+    <div class="modal fade" id="newRecord" role="dialog">
+        <div class="modal-dialog modal-xl">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">New Record</h4>
+                </div>
+                <div class="modal-body" id="modal-body">
+
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Champion:</label>
+                        <select class="form-control" id="new-champion-selection">
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Game Mode:</label>
+                        <select class="form-control" id="new-gamemode-selection">
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Win Rate:</span>
+                        </div>
+                        <input type="text" id="newwinrate" class="form-control" placeholder="Win Rate">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Pick Rate:</span>
+                        </div>
+                        <input type="text" id="newpickrate" class="form-control" placeholder="Pick Rate">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Ban Rate:</span>
+                        </div>
+                        <input type="text" id="newbanrate" class="form-control" placeholder="Ban Rate">
+                    </div>
+
+                    <br>
+                    <button type="button" id="new-submit-btn" onclick="newStat()" class="btn btn-primary">Submit</button>
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 
 
@@ -144,6 +199,7 @@
     <script src="resources/scripts/role.js"></script>
     <script src="resources/scripts/damagetype.js"></script>
     <script src="resources/scripts/stats.js"></script>
+    <script src="resources/scripts/gamemodes.js"></script>
 </body>
 
 </html>

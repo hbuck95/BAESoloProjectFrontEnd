@@ -62,21 +62,85 @@ function getChampion(id) {
 function editRecord(id) {
     let idInput = document.getElementById("id");
     let nameInput = document.getElementById("name");
-    let pantheonInput = document.getElementById("pantheon");
-    let damageTypeInput = document.getElementById("damagetype");
     let hpInput = document.getElementById("hp");
     let damageInput = document.getElementById("damage");
+    let pantheonSelector = document.getElementById("pantheon-selection");
+    let roleSelector = document.getElementById("role-selection");
+    let damageSelector = document.getElementById("damage-selection");
 
     getChampion(id);
 
     setTimeout(() => {
         idInput.value = id;
         nameInput.value = selectedChampion.name;
-        pantheonInput.value = selectedChampion.pantheon.name;
-        damageTypeInput.value = selectedChampion.damageType.name;
         hpInput.value = selectedChampion.health;
         damageInput.value = selectedChampion.damage;
     }), 1000
+
+    getAllPantheons(false).then(panths => {
+
+        let pantheons = JSON.parse(panths);
+
+        for(let p of pantheons){
+            
+            let selection = document.createElement("option");        
+            selection.setAttribute("id", p.id);
+            selection.text = p.name;
+            pantheonSelector.add(selection);
+        }
+
+        //Select the current pantheon by default
+        for(let i = 0; i < pantheonSelector.options.length; i++){
+            if((pantheonSelector.options[i].text) === selectedChampion.pantheon.name){
+                pantheonSelector.selectedIndex = i;
+                break;
+            }
+        }
+
+    });
+
+    getAllRoles(false).then(roles => {
+
+        let allRoles = JSON.parse(roles);
+
+        for(let r of allRoles){
+            let selection = document.createElement("option");
+            selection.setAttribute("id", r.id);
+            selection.text = r.name;
+            roleSelector.add(selection);
+        }
+
+         //Select the current role by default
+         for(let i = 0; i < roleSelector.options.length; i++){
+            if((roleSelector.options[i].text) === selectedChampion.role.name){
+                roleSelector.selectedIndex = i;
+                break;
+            }
+        }
+        
+    });
+
+    getDamageTypes(false).then(dmgs => {
+
+        let dmgTypes = JSON.parse(dmgs);
+
+        for(let type of dmgTypes){
+            let selection = document.createElement("option");
+            selection.setAttribute("id", type.id);
+            selection.text = type.name;
+            damageSelector.add(selection);
+        }
+
+         //Select the current role by default
+         for(let i = 0; i < damageSelector.options.length; i++){
+            if((damageSelector.options[i].text) === selectedChampion.damageType.name){
+                damageSelector.selectedIndex = i;
+                break;
+            }
+        }
+        
+    });
+  
 }
 
 function deleteRecord(id) {
@@ -103,10 +167,18 @@ function deleteRecord(id) {
 function updateRecord() {
     let idInput = document.getElementById("id");
     let nameInput = document.getElementById("name");
-    let pantheonInput = document.getElementById("pantheon");
-    let damageTypeInput = document.getElementById("damagetype");
     let hpInput = document.getElementById("hp");
     let damageInput = document.getElementById("damage");
+    let pantheonSelector = document.getElementById("pantheon-selection");
+    let roleSelector = document.getElementById("role-selection");
+    let damageSelector = document.getElementById("damage-selection");
+
+
+
+    if (!window.confirm("Are you sure you want to update this record?")) {
+        return;
+    }
+
 
     const location = `/updateChampion/${idInput.value}`;
 
@@ -114,16 +186,16 @@ function updateRecord() {
         "id": `${idInput.value}`,
         "name": `${nameInput.value}`,
         "role": {
-            "id": 1,
-            "name": "Guardian"
+            "id": `${roleSelector[roleSelector.selectedIndex].id}`,
+            "name": `${roleSelector[roleSelector.selectedIndex].text}`,
         },
         "pantheon": {
-            "id": 1,
-            "name": "Norse"
+            "id": `${pantheonSelector[pantheonSelector.selectedIndex].id}`,
+            "name": `${pantheonSelector[pantheonSelector.selectedIndex].text}`,
         },
         "damageType": {
-            "id": 1,
-            "name": "Magical"
+            "id": `${damageSelector[damageSelector.selectedIndex].id}`,
+            "name": `${damageSelector[damageSelector.selectedIndex].text}`,
         },
         "health": `${hpInput.value}`,
         "damage": `${damageInput.value}`

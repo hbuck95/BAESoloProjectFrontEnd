@@ -1,6 +1,6 @@
 const api = "http://localhost:8080/BAESoloProject/api";
 
-function makeRequest(method, url, body) {
+async function makeRequest(method, url, body) {
     console.log("Making new promise");
     return new Promise((res, rej) => {
         console.log(api + url);

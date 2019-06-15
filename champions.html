@@ -21,7 +21,7 @@
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" onclick="displayChampion()" type="button"
                 id="button-addon2">Search</button>
-                <button class="btn btn-outline-secondary"onclick="getAllChampions()" type="button">View All</button>
+            <button class="btn btn-outline-secondary" onclick="getAllChampions()" type="button">View All</button>
         </div>
     </div>
 
@@ -72,19 +72,24 @@
                         <input type="text" id="name" class="form-control" placeholder="Name">
                     </div>
 
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Pantheon:</span>
-                        </div>
-                        <input type="text" id="pantheon" class="form-control" placeholder="Pantheon">
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Role:</label>
+                        <select class="form-control" id="role-selection">
+                        </select>
                     </div>
 
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Damage type:</span>
-                        </div>
-                        <input type="text" id="damagetype" class="form-control" placeholder="Damage type">
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Pantheon:</label>
+                        <select class="form-control" id="pantheon-selection">
+                        </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Damage Type:</label>
+                        <select class="form-control" id="damage-selection">
+                        </select>
+                    </div>
+
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -135,6 +140,10 @@
     <!-- Other scripts -->
     <script src="resources/scripts/utility.js"></script>
     <script src="resources/scripts/champions.js"></script>
+    <script src="resources/scripts/pantheon.js"></script>
+    <script src="resources/scripts/role.js"></script>
+    <script src="resources/scripts/damagetype.js"></script>
+    <script src="resources/scripts/stats.js"></script>
 </body>
 
 </html>

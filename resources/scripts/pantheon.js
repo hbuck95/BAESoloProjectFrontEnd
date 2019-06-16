@@ -2,6 +2,7 @@ const panthPath = "/pantheon";
 let selectedPantheon;
 
 let pantheonNameInput = document.getElementById("pantheon-name");
+let newPantheonNameInput = document.getElementById("new-pantheon-name");
 
 async function getAllPantheons(display = true) {
     const location = "/getAllPantheons"
@@ -106,7 +107,7 @@ function deletePantheon(id) {
     if (!window.confirm("Are you sure you want to delete this record?")) {
         return;
     }
-    
+
     makeRequest("DELETE", panthPath + location, "")
         .then(resp => {
             const response = JSON.parse(resp);
@@ -118,6 +119,25 @@ function deletePantheon(id) {
         );
 }
 
-function newPantheon() {
+async function newPantheon() {
+    const location = '/createPantheon';
 
+    newPantheonNameInput.focus();
+    newPantheonNameInput.select();
+
+    document.getElementById("new-submit-btn").addEventListener("click", async function () {
+
+        let newPantheon = {
+            "name": `${newPantheonNameInput.value}`
+        };
+
+        console.log(newPantheon);
+
+        await makeRequest("POST", panthPath + location, JSON.stringify(newPantheon)).then(response => {
+            let reply = JSON.parse(response);
+            alert(reply.message);
+            window.location.reload();
+        }).catch(error => console.log(error));
+
+    });
 }

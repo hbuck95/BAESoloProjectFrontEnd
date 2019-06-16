@@ -1,6 +1,9 @@
 const rolePath = "/role";
 let selectedRole;
 
+let roleNameInput = document.getElementById("role-name");
+let newRoleNameInput = document.getElementById("new-role-name");
+
 async function getAllRoles(display = true) {
     const location = "/getAllRoles"
     let result = "";

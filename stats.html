@@ -15,6 +15,24 @@
 
 <body>
     <h1>Stats</h1>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">BAE Solo Project</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="index.html">Home</a>
+                <a class="nav-item nav-link" href="champions.html">Champions</a>
+                <a class="nav-item nav-link active" href="stats.html">Stats <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="roles.html">Roles</a>
+                <a class="nav-item nav-link" href="pantheons.html">Pantheons</a>
+                <a class="nav-item nav-link" href="gamemodes.html">Game Modes</a>
+            </div>
+        </div>
+    </nav>
+
 
     <div class="input-group mb-3">
         <input type="text" class="form-control" id="search-box" placeholder="Search by id (e.g. '1')">
@@ -162,7 +180,8 @@
                     </div>
 
                     <br>
-                    <button type="button" id="new-submit-btn" onclick="newStat()" class="btn btn-primary">Submit</button>
+                    <button type="button" id="new-submit-btn" onclick="newStat()"
+                        class="btn btn-primary">Submit</button>
 
 
 

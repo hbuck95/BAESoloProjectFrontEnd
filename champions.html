@@ -15,6 +15,23 @@
 
 <body>
     <h1>Champions</h1>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">BAE Solo Project</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="index.html">Home</a>
+                    <a class="nav-item nav-link active" href="champions.html">Champions <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="stats.html">Stats</a>
+                    <a class="nav-item nav-link" href="roles.html">Roles</a>
+                    <a class="nav-item nav-link" href="pantheons.html">Pantheons</a>
+                    <a class="nav-item nav-link" href="gamemodes.html">Game Modes</a>
+                </div>
+            </div>
+        </nav>
 
     <div class="input-group mb-3">
         <input type="text" class="form-control" id="search-box" placeholder="Search by id (e.g. '1')">
@@ -137,24 +154,24 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Name:</span>
                         </div>
-                        <input type="text" id="name" class="form-control" placeholder="Name">
+                        <input type="text" id="new-name" class="form-control" placeholder="Name">
                     </div>
 
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Role:</label>
-                        <select class="form-control" id="role-selection">
+                        <select class="form-control" id="new-role-selection">
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Pantheon:</label>
-                        <select class="form-control" id="pantheon-selection">
+                        <select class="form-control" id="new-pantheon-selection">
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Damage Type:</label>
-                        <select class="form-control" id="damage-selection">
+                        <select class="form-control" id="new-damage-selection">
                         </select>
                     </div>
 
@@ -163,18 +180,18 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Health:</span>
                         </div>
-                        <input type="text" id="hp" class="form-control" placeholder="Health">
+                        <input type="text" id="new-hp" class="form-control" placeholder="Health">
                     </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Damage:</span>
                         </div>
-                        <input type="text" id="damage" class="form-control" placeholder="Damage">
+                        <input type="text" id="new-damage" class="form-control" placeholder="Damage">
                     </div>
 
                     <br>
-                    <button type="button" id="submit-btn" class="btn btn-primary">Submit</button>
+                    <button type="button" id="new-submit-btn" class="btn btn-primary" onclick="newChamp()">Submit</button>
 
 
 

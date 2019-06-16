@@ -1,5 +1,19 @@
 const api = "http://localhost:8080/BAESoloProject/api";
 
+function populateOptionList(optionList, dataArray){
+
+    if(optionList.options.length != dataArray.length){
+        optionList.options.length = 0; //If there are not equal reset it as there could a DB entry change
+
+        for(let data of dataArray){
+            let option = document.createElement("option");
+            option.setAttribute("id", data.id);
+            option.text = data.name;
+            optionList.add(option);
+        }
+    }
+}
+
 async function makeRequest(method, url, body) {
     console.log("Making new promise");
     return new Promise((res, rej) => {

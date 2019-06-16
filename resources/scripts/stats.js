@@ -1,19 +1,21 @@
 const statPath = "/stats";
 let selectedStat;
 
-let idInput = document.getElementById("id");
+//Edit record input fields
 let winrateInput = document.getElementById("winrate");
 let pickrateInput = document.getElementById("pickrate");
 let banrateInput = document.getElementById("banrate");
 let championSelector = document.getElementById("champion-selection");
 let gamemodeSelector = document.getElementById("gamemode-selection");
 
+//New record input fields
 let newChampionSelector = document.getElementById("new-champion-selection");
 let newGamemodeSelector = document.getElementById("new-gamemode-selection");
 let newWinrateInput = document.getElementById("newwinrate");
 let newPickrateInput = document.getElementById("newpickrate");
 let newBanrateInput = document.getElementById("newbanrate");
 
+//Retrieve all stat records from the database
 async function getAllStats(display = true) {
     const location = "/getAllStats"
     let result = "";
@@ -35,7 +37,7 @@ async function getAllStats(display = true) {
 
 }
 
-
+//Delete a record
 function deleteStat(id) {
     const location = `/deleteStats/${id}`;
 
@@ -56,6 +58,7 @@ function deleteStat(id) {
 
 }
 
+//Get an individual record to display
 async function displayStat() {
     id = (document.getElementById("search-box").value);
     const location = `/getStats/${id}`;
@@ -78,6 +81,7 @@ async function displayStat() {
     displayData(stat, "deleteStat", "editStat", "newStat");
 }
 
+//Retrieve a particular record from the database
 function getStat(id) {
 
     id = id === undefined ? document.getElementById("search-box").value : id;
@@ -95,6 +99,7 @@ function getStat(id) {
         );
 }
 
+//Setup the new stat input screen
 async function newStat() {
     let champions = [];
     let gameModes = [];
@@ -133,6 +138,7 @@ async function newStat() {
 
 }
 
+//Push the newly created stat to the database
 async function saveNewStats() {
     let stat = {
         "champion": {},
@@ -155,7 +161,6 @@ async function saveNewStats() {
         gameModes = JSON.parse(modes);
     })
 
-
     let updatedChamp = champions.filter(x => x.id == newChampionSelector[newChampionSelector.selectedIndex].id);
     let updatedMode = gameModes.filter(x => x.id == newGamemodeSelector[newGamemodeSelector.selectedIndex].id);
     stat.winRate = newWinrateInput.value;
@@ -172,10 +177,9 @@ async function saveNewStats() {
         window.location.reload();
     }).catch(error => console.log(error));
 
-
-
 }
 
+//Setup the edit record form
 function editStat(id) {
 
     getStat(id);
@@ -227,7 +231,6 @@ function editStat(id) {
                 selection.text = m.name;
                 gamemodeSelector.add(selection);
             }
-
         }
 
         //Select the current role by default
@@ -243,7 +246,7 @@ function editStat(id) {
     document.getElementById("submit-btn").addEventListener("click", function () { updateStat(); });
 }
 
-
+//Save record changes to the database
 async function updateStat() {
 
     if (!window.confirm("Are you sure you want to update this record?")) {
@@ -285,6 +288,4 @@ async function updateStat() {
             console.log(error);
         }
         );
-
 }
-

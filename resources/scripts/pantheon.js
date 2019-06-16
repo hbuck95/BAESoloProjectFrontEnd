@@ -100,10 +100,24 @@ function updatePantheon() {
 
 }
 
-function deletePantheon(){
+function deletePantheon(id) {
+    const location = `/deletePantheon/${id}`;
 
+    if (!window.confirm("Are you sure you want to delete this record?")) {
+        return;
+    }
+    
+    makeRequest("DELETE", panthPath + location, "")
+        .then(resp => {
+            const response = JSON.parse(resp);
+            window.alert(response.message);
+        })
+        .catch(error => {
+            window.alert("You can't delete this record as there are other records that rely on it!\nPlease delete the champions associated with this pantheon first.");
+        }
+        );
 }
 
-function newPantheon(){
-    
+function newPantheon() {
+
 }

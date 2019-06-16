@@ -17,7 +17,6 @@ function populateOptionList(optionList, dataArray){
 async function makeRequest(method, url, body) {
     console.log("Making new promise");
     return new Promise((res, rej) => {
-        console.log(api + url);
         const req = new XMLHttpRequest();
         req.open(method, api + url);
 
@@ -34,7 +33,6 @@ async function makeRequest(method, url, body) {
 }
 
 function displayData(data, delFunc, upFunc, newFunc) {
-    console.log("Displaying data");
     let entity = []; //Reset this variable
 
     let parsedData = JSON.parse(data); //Convert the json data to an object

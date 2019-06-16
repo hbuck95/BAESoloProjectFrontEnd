@@ -213,9 +213,9 @@ async function newChamp() {
         damageTypes = JSON.parse(dts);
     });
 
-    populateOptionList(pantheonSelector, pantheons);
-    populateOptionList(roleSelector, roles);
-    populateOptionList(damageSelector, damageTypes);
+    populateOptionList(newPantheonSelector, pantheons);
+    populateOptionList(newRoleSelector, roles);
+    populateOptionList(newDamageSelector, damageTypes);
 
     document.getElementById("new-submit-btn").addEventListener("click", function () { saveNewChamp(); });
 }

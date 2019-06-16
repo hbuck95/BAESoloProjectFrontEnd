@@ -1,11 +1,12 @@
 const api = "http://localhost:8080/BAESoloProject/api";
 
-function populateOptionList(optionList, dataArray){
-
-    if(optionList.options.length != dataArray.length){
+//Populate an options list with the provided data
+//Refactored into own method due to wide usage
+function populateOptionList(optionList, dataArray) {
+    if (optionList.options.length != dataArray.length) {
         optionList.options.length = 0; //If there are not equal reset it as there could a DB entry change
 
-        for(let data of dataArray){
+        for (let data of dataArray) {
             let option = document.createElement("option");
             option.setAttribute("id", data.id);
             option.text = data.name;
@@ -41,7 +42,10 @@ function displayData(data, delFunc, upFunc, newFunc) {
     //If the JSON is an array (more than 1 record) join the arrays otherwise push the record into the array
     Array.isArray(parsedData) ? entity = entity.concat(parsedData) : entity.push(parsedData);
 
-    entity.sort(function(a,b){return a.id - b.id});
+    //Sort the data by id, occassionally if mutliple actions happen quickly the database does not send the records in order.
+    entity.sort(function (a, b) { 
+        return a.id - b.id 
+    });
 
     //If the table already exists remove it
     if (!!table) {
@@ -68,6 +72,7 @@ function displayData(data, delFunc, upFunc, newFunc) {
     headCell.innerHTML = "<b>Actions</b>";
     head.appendChild(headCell);
 
+    //New record button creation
     let newBtn = document.createElement("button");
     headCell = document.createElement("th");
     newBtn.setAttribute("class", "btn btn-primary new-btn");
@@ -118,29 +123,34 @@ function displayData(data, delFunc, upFunc, newFunc) {
         cell = row.insertCell();
         cell.setAttribute("id", element["id"]);
 
+        //message is the name of the property in any response from the server that is a confirmation of success/error
+        //if so the elements for editing/deleting do not need to be drawn.
         if (data.includes("message"))
             return;
 
 
+        //edit button creation for each record
         let editBtn = document.createElement("button");
         editBtn.setAttribute("class", "btn btn-outline-info edit-btn");
         editBtn.setAttribute("id", element["id"]);
         editBtn.setAttribute("innerHTML", "[Edit]");
         editBtn.innerHTML = "Edit";
 
+        //delete button creation for each cell
         let delBtn = document.createElement("button");
         delBtn.setAttribute("class", "btn btn-outline-info");
         delBtn.innerHTML = "Delete";
 
-
+        //append the new buttons to the table cell
         cell.append(editBtn);
-        cell.append(document.createTextNode(" "));
+        cell.append(document.createTextNode(" "));//add a space between them
         cell.append(delBtn);
-        cell.setAttribute("colspan", "2");
+        cell.setAttribute("colspan", "2");//merge this column with the column created from the new record button
+
+        //onclick attributes for edit and delete
         editBtn.setAttribute("onclick", `${upFunc}(${editBtn.parentElement.id});`);
         editBtn.setAttribute("data-toggle", "modal");
         editBtn.setAttribute("data-target", "#myModal");
-
         delBtn.setAttribute("onclick", `${delFunc}(${delBtn.parentElement.id})`);
 
 

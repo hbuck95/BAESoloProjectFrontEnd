@@ -30,11 +30,9 @@ async function getAllStats(display = true) {
         })
         .catch(error => {
             console.log(error);
-        }
-        );
+        });
 
     return result;
-
 }
 
 //Delete a record
@@ -53,9 +51,7 @@ function deleteStat(id) {
         .catch(error => {
             console.log(error);
             window.alert("You can't delete this record as there are stats that rely on it!\nPlease delete the stats associated with this champion first.");
-        }
-        );
-
+        });
 }
 
 //Get an individual record to display
@@ -75,8 +71,7 @@ async function displayStat() {
         })
         .catch(error => {
             console.log(error);
-        }
-        );
+        });
 
     displayData(stat, "deleteStat", "editStat", "newStat");
 }
@@ -95,8 +90,7 @@ function getStat(id) {
         })
         .catch(error => {
             console.log(error);
-        }
-        );
+        });
 }
 
 //Setup the new stat input screen
@@ -135,7 +129,6 @@ async function newStat() {
     }
 
     document.getElementById("new-submit-btn").addEventListener("click", function () { saveNewStats(); });
-
 }
 
 //Push the newly created stat to the database
@@ -169,8 +162,6 @@ async function saveNewStats() {
     stat.champion = updatedChamp[0];
     stat.gameMode = updatedMode[0];
 
-    console.log(stat);
-
     await makeRequest("POST", statPath + location, JSON.stringify(stat)).then(response => {
         let reply = JSON.parse(response);
         alert(reply.message);
@@ -180,7 +171,7 @@ async function saveNewStats() {
 }
 
 //Setup the edit record form
-function editStat(id) {
+async function editStat(id) {
 
     getStat(id);
 
@@ -191,22 +182,21 @@ function editStat(id) {
         banrateInput.value = selectedStat.banRate;
     }), 1000
 
-    getAllChampions(false).then(champs => {
+    let champions = [];
+    let gameModes = [];
 
-        let champions = JSON.parse(champs);
+    await getAllChampions(false).then(champs => {
+        champions = JSON.parse(champs);
+    });
 
-        if (championSelector.options.length != champions.length) {
-            championSelector.length = 0;
+    await getAllGameModes(false).then(modes => {
+        gameModes = JSON.parse(modes);
+    })
 
-            for (let c of champions) {
-                let selection = document.createElement("option");
-                selection.setAttribute("id", c.id);
-                selection.text = c.name;
-                championSelector.add(selection);
-            }
-        }
+    populateOptionList(championSelector, champions);
+    populateOptionList(gamemodeSelector, gameModes);
 
-        //Select the current pantheon by default
+   //Select the current champion by default
         for (let i = 0; i < championSelector.options.length; i++) {
             if ((championSelector.options[i].id) == selectedStat.champion.id) {
                 console.log("found it");
@@ -215,33 +205,13 @@ function editStat(id) {
             }
         }
 
-    });
-
-    getAllGameModes(false).then(modes => {
-
-        let allModes = JSON.parse(modes);
-        console.log(allModes);
-
-        if (gamemodeSelector.options.length != allModes.length) {
-            gamemodeSelector.options.length = 0;
-
-            for (let m of allModes) {
-                let selection = document.createElement("option");
-                selection.setAttribute("id", m.id);
-                selection.text = m.name;
-                gamemodeSelector.add(selection);
-            }
-        }
-
-        //Select the current role by default
+     //Select the current game mode by default
         for (let i = 0; i < gamemodeSelector.options.length; i++) {
             if ((gamemodeSelector.options[i].id) == selectedStat.gameMode.id) {
                 gamemodeSelector.selectedIndex = i;
                 break;
             }
-        }
-
-    });
+        }       
 
     document.getElementById("submit-btn").addEventListener("click", function () { updateStat(); });
 }

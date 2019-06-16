@@ -1,6 +1,8 @@
 const panthPath = "/pantheon";
 let selectedPantheon;
 
+let pantheonNameInput = document.getElementById("pantheon-name");
+
 async function getAllPantheons(display = true) {
     const location = "/getAllPantheons"
     let result = "";
@@ -8,7 +10,7 @@ async function getAllPantheons(display = true) {
     await makeRequest("GET", panthPath + location, "")
         .then(data => {
             if (display) {
-                displayData(data);
+                displayData(data, "deletePantheon", "editPantheon", "newPantheon");
             }
             result = data;
             return data;
@@ -44,3 +46,64 @@ async function displayPantheon() {
     displayData(panth, "deletePantheon", "editPantheon", "newPantheon");
 }
 
+function getPantheon(id) {
+
+    id = id === undefined ? document.getElementById("search-box").value : id;
+
+    const location = `/getPantheon/${id}`;
+
+    makeRequest("GET", panthPath + location, "")
+        .then(data => {
+            selectedPantheon = JSON.parse(data);
+            return data;
+        })
+        .catch(error => {
+            console.log(error);
+        }
+        );
+}
+
+async function editPantheon(id) {
+    getPantheon(id);
+
+    setTimeout(() => {
+        idInput.value = id;
+        pantheonNameInput.value = selectedPantheon.name;
+    }), 1000
+
+    document.getElementById("submit-btn").addEventListener("click", function () { updatePantheon(); });
+}
+
+function updatePantheon() {
+
+    if (!window.confirm("Are you sure you want to update this record?")) {
+        return;
+    }
+
+    const location = `/updatePantheon/${idInput.value}`;
+
+    let updatedRecord = {
+        "id": idInput.value,
+        "name": `${pantheonNameInput.value}`
+    };
+
+    makeRequest("PUT", panthPath + location, JSON.stringify(updatedRecord))
+        .then(resp => {
+            const response = JSON.parse(resp);
+            window.alert(response.message);
+            window.location.reload();
+        })
+        .catch(error => {
+            console.log(error);
+        }
+        );
+
+}
+
+function deletePantheon(){
+
+}
+
+function newPantheon(){
+    
+}

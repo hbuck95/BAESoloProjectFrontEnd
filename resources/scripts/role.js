@@ -47,3 +47,57 @@ async function displayRole() {
     displayData(role, "deleteRole", "editRole", "newRole");
 }
 
+
+function getRole(id) {
+
+    id = id === undefined ? document.getElementById("search-box").value : id;
+
+    const location = `/getRole/${id}`;
+
+    makeRequest("GET", rolePath + location, "")
+        .then(data => {
+            selectedRole = JSON.parse(data);
+            return data;
+        })
+        .catch(error => {
+            console.log(error);
+        }
+        );
+}
+
+async function editRole(id) {
+    getRole(id);
+
+    setTimeout(() => {
+        idInput.value = id;
+        roleNameInput.value = selectedRole.name;
+    }), 1000
+
+    document.getElementById("submit-btn").addEventListener("click", function () { updateRole(); });
+}
+
+function updateRole() {
+
+    if (!window.confirm("Are you sure you want to update this record?")) {
+        return;
+    }
+
+    const location = `/updateRole/${idInput.value}`;
+
+    let updatedRecord = {
+        "id": idInput.value,
+        "name": `${roleNameInput.value}`
+    };
+
+    makeRequest("PUT", rolePath + location, JSON.stringify(updatedRecord))
+        .then(resp => {
+            const response = JSON.parse(resp);
+            window.alert(response.message);
+            window.location.reload();
+        })
+        .catch(error => {
+            console.log(error);
+        }
+        );
+
+}

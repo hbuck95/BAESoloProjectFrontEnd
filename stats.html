@@ -10,35 +10,36 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>SMITE - Champions</title>
+    <title>SMITE - Stats</title>
 </head>
 
 <body>
-    <h1>Champions</h1>
+    <h1>Stats</h1>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">BAE Solo Project</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="index.html">Home</a>
-                    <a class="nav-item nav-link active" href="champions.html">Champions <span class="sr-only">(current)</span></a>
-                    <a class="nav-item nav-link" href="stats.html">Stats</a>
-                    <a class="nav-item nav-link" href="roles.html">Roles</a>
-                    <a class="nav-item nav-link" href="pantheons.html">Pantheons</a>
-                    <a class="nav-item nav-link" href="gamemodes.html">Game Modes</a>
-                </div>
+        <a class="navbar-brand" href="#">BAE Solo Project</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="index.html">Home</a>
+                <a class="nav-item nav-link" href="champions.html">Champions</a>
+                <a class="nav-item nav-link active" href="stats.html">Stats <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="roles.html">Roles</a>
+                <a class="nav-item nav-link" href="pantheons.html">Pantheons</a>
+                <a class="nav-item nav-link" href="gamemodes.html">Game Modes</a>
             </div>
-        </nav>
+        </div>
+    </nav>
+
 
     <div class="input-group mb-3">
         <input type="text" class="form-control" id="search-box" placeholder="Search by id (e.g. '1')">
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" onclick="displayChampion()" type="button"
+            <button class="btn btn-outline-secondary" onclick="displayStat()" type="button"
                 id="button-addon2">Search</button>
-            <button class="btn btn-outline-secondary" onclick="getAllChampions()" type="button">View All</button>
+            <button class="btn btn-outline-secondary" onclick="getAllStats()" type="button">View All</button>
         </div>
     </div>
 
@@ -82,44 +83,37 @@
                         <input type="text" id="id" class="form-control" placeholder="ID" readonly>
                     </div>
 
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Name:</span>
-                        </div>
-                        <input type="text" id="name" class="form-control" placeholder="Name">
-                    </div>
-
                     <div class="form-group">
-                        <label for="exampleFormControlSelect1">Role:</label>
-                        <select class="form-control" id="role-selection">
+                        <label for="exampleFormControlSelect1">Champion:</label>
+                        <select class="form-control" id="champion-selection">
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleFormControlSelect1">Pantheon:</label>
-                        <select class="form-control" id="pantheon-selection">
+                        <label for="exampleFormControlSelect1">Game Mode:</label>
+                        <select class="form-control" id="gamemode-selection">
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Damage Type:</label>
-                        <select class="form-control" id="damage-selection">
-                        </select>
-                    </div>
-
-
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Health:</span>
-                        </div>
-                        <input type="text" id="hp" class="form-control" placeholder="Health">
                     </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Damage:</span>
+                            <span class="input-group-text" id="basic-addon1">Win Rate:</span>
                         </div>
-                        <input type="text" id="damage" class="form-control" placeholder="Damage">
+                        <input type="text" id="winrate" class="form-control" placeholder="Win Rate">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Pick Rate:</span>
+                        </div>
+                        <input type="text" id="pickrate" class="form-control" placeholder="Pick Rate">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Ban Rate:</span>
+                        </div>
+                        <input type="text" id="banrate" class="form-control" placeholder="Ban Rate">
                     </div>
 
                     <br>
@@ -137,6 +131,7 @@
         </div>
     </div>
 
+
     <!-- Toggle modal with button attrbutes: data-toggle="modal" data-target="#myModal". No onclick method needed -->
     <!-- Modal -->
     <div class="modal fade" id="newRecord" role="dialog">
@@ -150,48 +145,43 @@
                 </div>
                 <div class="modal-body" id="modal-body">
 
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Name:</span>
-                        </div>
-                        <input type="text" id="new-name" class="form-control" placeholder="Name">
-                    </div>
 
                     <div class="form-group">
-                        <label for="exampleFormControlSelect1">Role:</label>
-                        <select class="form-control" id="new-role-selection">
+                        <label for="exampleFormControlSelect1">Champion:</label>
+                        <select class="form-control" id="new-champion-selection">
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleFormControlSelect1">Pantheon:</label>
-                        <select class="form-control" id="new-pantheon-selection">
+                        <label for="exampleFormControlSelect1">Game Mode:</label>
+                        <select class="form-control" id="new-gamemode-selection">
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Damage Type:</label>
-                        <select class="form-control" id="new-damage-selection">
-                        </select>
-                    </div>
-
-
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Health:</span>
-                        </div>
-                        <input type="text" id="new-hp" class="form-control" placeholder="Health">
                     </div>
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">Damage:</span>
+                            <span class="input-group-text" id="basic-addon1">Win Rate:</span>
                         </div>
-                        <input type="text" id="new-damage" class="form-control" placeholder="Damage">
+                        <input type="text" id="newwinrate" class="form-control" placeholder="Win Rate">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Pick Rate:</span>
+                        </div>
+                        <input type="text" id="newpickrate" class="form-control" placeholder="Pick Rate">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Ban Rate:</span>
+                        </div>
+                        <input type="text" id="newbanrate" class="form-control" placeholder="Ban Rate">
                     </div>
 
                     <br>
-                    <button type="button" id="new-submit-btn" class="btn btn-primary" onclick="newChamp()">Submit</button>
+                    <button type="button" id="new-submit-btn" onclick="newStat()"
+                        class="btn btn-primary">Submit</button>
 
 
 
@@ -204,7 +194,6 @@
 
         </div>
     </div>
-
 
 
 
@@ -229,6 +218,7 @@
     <script src="resources/scripts/role.js"></script>
     <script src="resources/scripts/damagetype.js"></script>
     <script src="resources/scripts/stats.js"></script>
+    <script src="resources/scripts/gamemodes.js"></script>
 </body>
 
 </html>

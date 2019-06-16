@@ -1,21 +1,41 @@
 const path = "/champion";
 let selectedChampion;
 
-//Execute when script has loaded
-getAllChampions();
+let idInput = document.getElementById("id");
+let nameInput = document.getElementById("name");
+let hpInput = document.getElementById("hp");
+let damageInput = document.getElementById("damage");
+let pantheonSelector = document.getElementById("pantheon-selection");
+let roleSelector = document.getElementById("role-selection");
+let damageSelector = document.getElementById("damage-selection");
 
-function getAllChampions() {
+let newNameInput = document.getElementById("new-name");
+let newHpInput = document.getElementById("new-hp");
+let newDamageInput = document.getElementById("new-damage");
+let newPantheonSelector = document.getElementById("new-pantheon-selection");
+let newRoleSelector = document.getElementById("new-role-selection");
+let newDamageSelector = document.getElementById("new-damage-selection");
+
+
+async function getAllChampions(display = true) {
     const location = "/getAllChampions"
-    console.log("Get all champions");
+    let result = "";
 
-    makeRequest("GET", path + location, "")
+    await makeRequest("GET", path + location, "")
         .then(data => {
-            displayData(data);
+            if (display) {
+                displayData(data, "deleteChamp", "editChamp", "newChamp");
+            }
+            result = data;
+            return data;
         })
         .catch(error => {
             console.log(error);
         }
         );
+
+    return result;
+
 }
 
 async function displayChampion() {
@@ -23,7 +43,7 @@ async function displayChampion() {
     const location = `/getChampion/${id}`;
 
     //If no id is entered default to get all champions
-    if(id == ""){
+    if (id == "") {
         getAllChampions();
         return;
     }
@@ -38,7 +58,7 @@ async function displayChampion() {
         );
 
 
-    displayData(champ);
+    displayData(champ, "deleteChamp", "editChamp", "newChamp");
 }
 
 function getChampion(id) {
@@ -59,14 +79,7 @@ function getChampion(id) {
         );
 }
 
-function editRecord(id) {
-    let idInput = document.getElementById("id");
-    let nameInput = document.getElementById("name");
-    let hpInput = document.getElementById("hp");
-    let damageInput = document.getElementById("damage");
-    let pantheonSelector = document.getElementById("pantheon-selection");
-    let roleSelector = document.getElementById("role-selection");
-    let damageSelector = document.getElementById("damage-selection");
+async function editChamp(id) {
 
     getChampion(id);
 
@@ -77,73 +90,54 @@ function editRecord(id) {
         damageInput.value = selectedChampion.damage;
     }), 1000
 
-    getAllPantheons(false).then(panths => {
+    let pantheons = [];
+    let roles = [];
+    let damageTypes = [];
 
-        let pantheons = JSON.parse(panths);
-
-        for(let p of pantheons){
-            
-            let selection = document.createElement("option");        
-            selection.setAttribute("id", p.id);
-            selection.text = p.name;
-            pantheonSelector.add(selection);
-        }
-
-        //Select the current pantheon by default
-        for(let i = 0; i < pantheonSelector.options.length; i++){
-            if((pantheonSelector.options[i].text) === selectedChampion.pantheon.name){
-                pantheonSelector.selectedIndex = i;
-                break;
-            }
-        }
-
+    await getAllPantheons(false).then(panths => {
+        pantheons = JSON.parse(panths);
     });
 
-    getAllRoles(false).then(roles => {
-
-        let allRoles = JSON.parse(roles);
-
-        for(let r of allRoles){
-            let selection = document.createElement("option");
-            selection.setAttribute("id", r.id);
-            selection.text = r.name;
-            roleSelector.add(selection);
-        }
-
-         //Select the current role by default
-         for(let i = 0; i < roleSelector.options.length; i++){
-            if((roleSelector.options[i].text) === selectedChampion.role.name){
-                roleSelector.selectedIndex = i;
-                break;
-            }
-        }
-        
+    await getAllRoles(false).then(r => {
+        roles = JSON.parse(r);
     });
 
-    getDamageTypes(false).then(dmgs => {
-
-        let dmgTypes = JSON.parse(dmgs);
-
-        for(let type of dmgTypes){
-            let selection = document.createElement("option");
-            selection.setAttribute("id", type.id);
-            selection.text = type.name;
-            damageSelector.add(selection);
-        }
-
-         //Select the current role by default
-         for(let i = 0; i < damageSelector.options.length; i++){
-            if((damageSelector.options[i].text) === selectedChampion.damageType.name){
-                damageSelector.selectedIndex = i;
-                break;
-            }
-        }
-        
+    await getDamageTypes(false).then(dts => {
+        damageTypes = JSON.parse(dts);
     });
-  
+
+    populateOptionList(pantheonSelector, pantheons);
+    populateOptionList(roleSelector, roles);
+    populateOptionList(damageSelector, damageTypes);
+
+    //Select the current pantheon by default
+    for (let i = 0; i < pantheonSelector.options.length; i++) {
+        if ((pantheonSelector.options[i].text) === selectedChampion.pantheon.name) {
+            pantheonSelector.selectedIndex = i;
+            break;
+        }
+    }
+
+    //Select the current role by default
+    for (let i = 0; i < roleSelector.options.length; i++) {
+        if ((roleSelector.options[i].text) === selectedChampion.role.name) {
+            roleSelector.selectedIndex = i;
+            break;
+        }
+    }
+
+    //Select the current role by default
+    for (let i = 0; i < damageSelector.options.length; i++) {
+        if ((damageSelector.options[i].text) === selectedChampion.damageType.name) {
+            damageSelector.selectedIndex = i;
+            break;
+        }
+    }
+
+    document.getElementById("submit-btn").addEventListener("click", function () { updateChamp(); });
 }
 
-function deleteRecord(id) {
+function deleteChamp(id) {
     const location = `/deleteChampion/${id}`;
 
     if (!window.confirm("Are you sure you want to delete this record?")) {
@@ -154,31 +148,18 @@ function deleteRecord(id) {
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
-            toggleAccountForm("hidden");
-            resetForm();
         })
         .catch(error => {
             window.alert("You can't delete this record as there are stats that rely on it!\nPlease delete the stats associated with this champion first.");
         }
         );
-
 }
 
-function updateRecord() {
-    let idInput = document.getElementById("id");
-    let nameInput = document.getElementById("name");
-    let hpInput = document.getElementById("hp");
-    let damageInput = document.getElementById("damage");
-    let pantheonSelector = document.getElementById("pantheon-selection");
-    let roleSelector = document.getElementById("role-selection");
-    let damageSelector = document.getElementById("damage-selection");
-
-
+function updateChamp() {
 
     if (!window.confirm("Are you sure you want to update this record?")) {
         return;
     }
-
 
     const location = `/updateChampion/${idInput.value}`;
 
@@ -211,5 +192,68 @@ function updateRecord() {
             console.log(error);
         }
         );
+
+}
+
+async function newChamp() {
+
+    let pantheons = [];
+    let roles = [];
+    let damageTypes = [];
+
+    await getAllPantheons(false).then(panths => {
+        pantheons = JSON.parse(panths);
+    });
+
+    await getAllRoles(false).then(r => {
+        roles = JSON.parse(r);
+    });
+
+    await getDamageTypes(false).then(dts => {
+        damageTypes = JSON.parse(dts);
+    });
+
+    populateOptionList(pantheonSelector, pantheons);
+    populateOptionList(roleSelector, roles);
+    populateOptionList(damageSelector, damageTypes);
+
+    document.getElementById("new-submit-btn").addEventListener("click", function () { saveNewChamp(); });
+}
+
+async function saveNewChamp() {
+    const location = '/createChampion';
+
+    let pantheons = [];
+    let roles = [];
+    let damageTypes = [];
+
+    await getAllPantheons(false).then(panths => {
+        pantheons = JSON.parse(panths);
+    });
+
+    await getAllRoles(false).then(r => {
+        roles = JSON.parse(r);
+    });
+
+    await getDamageTypes(false).then(dts => {
+        damageTypes = JSON.parse(dts);
+    });
+
+    let champ = {
+        "name": `${newNameInput.value}`,
+        "role": (roles.filter(x => x.id == newRoleSelector[newRoleSelector.selectedIndex].id))[0],
+        "pantheon": (pantheons.filter(x => x.id == newPantheonSelector[newPantheonSelector.selectedIndex].id))[0],
+        "damageType": (damageTypes.filter(x => x.id == newDamageSelector[newDamageSelector.selectedIndex].id))[0],
+        "health": newHpInput.value,
+        "damage": newDamageInput.value
+    };
+
+    console.log(champ);
+
+    await makeRequest("POST", path + location, JSON.stringify(champ)).then(response => {
+        let reply = JSON.parse(response);
+        alert(reply.message);
+        window.location.reload();
+    }).catch(error => console.log(error));
 
 }

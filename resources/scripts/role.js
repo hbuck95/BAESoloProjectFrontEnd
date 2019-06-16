@@ -118,3 +118,26 @@ function deleteRole(id) {
         }
         );
 }
+
+async function newRole() {
+    const location = '/createRole';
+
+    newRoleNameInput.focus();
+    newRoleNameInput.select();
+
+    document.getElementById("new-submit-btn").addEventListener("click", async function () {
+
+        let newRole = {
+            "name": `${newRoleNameInput.value}`
+        };
+
+        console.log(newRole);
+
+        await makeRequest("POST", rolePath + location, JSON.stringify(newRole)).then(response => {
+            let reply = JSON.parse(response);
+            alert(reply.message);
+            window.location.reload();
+        }).catch(error => console.log(error));
+
+    });
+}

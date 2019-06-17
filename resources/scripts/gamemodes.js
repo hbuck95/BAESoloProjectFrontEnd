@@ -115,3 +115,22 @@ async function newGameMode() {
 
     });
 }
+
+function deleteGameMode(id) {
+    const location = `/deleteGameMode/${id}`;
+
+    if (!window.confirm("Are you sure you want to delete this record?")) {
+        return;
+    }
+
+    makeRequest("DELETE", modePath + location, "")
+        .then(resp => {
+            const response = JSON.parse(resp);
+            window.alert(response.message);
+            window.location.reload();
+        })
+        .catch(error => {
+            console.log(error);
+            window.alert("You can't delete this record as there are other records that rely on it!\nPlease delete the stats associated with this game mode first.");
+        });
+}

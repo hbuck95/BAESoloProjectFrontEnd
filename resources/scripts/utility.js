@@ -1,5 +1,8 @@
 const api = "http://localhost:8080/BAESoloProject/api";
 
+let idInput = document.getElementById("id"); //Used by each entity and so declare once in a shared class.
+
+
 //Populate an options list with the provided data
 //Refactored into own method due to wide usage
 function populateOptionList(optionList, dataArray) {
@@ -94,7 +97,7 @@ function displayData(data, delFunc, upFunc, newFunc) {
     //Attach the table to the document
     document.getElementById("data-table").appendChild(table);
 
-    //Start appending the data
+    //Start appending the data 
     let body = table.createTBody();
 
     //Create table rows

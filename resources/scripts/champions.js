@@ -1,7 +1,6 @@
 const path = "/champion";
 let selectedChampion;
 
-let idInput = document.getElementById("id");
 let nameInput = document.getElementById("name");
 let hpInput = document.getElementById("hp");
 let damageInput = document.getElementById("damage");

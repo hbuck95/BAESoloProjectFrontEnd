@@ -8,7 +8,7 @@ async function getAllGameModes(display = true) {
     await makeRequest("GET", modePath + location, "")
         .then(data => {
             if (display) {
-                displayData(data);
+                displayData(data, "deleteGameMode", "editGameMode", "newGameMode");
             }
             result = data;
             return data;
@@ -22,3 +22,23 @@ async function getAllGameModes(display = true) {
 
 }
 
+async function displayGameMode() {
+    id = (document.getElementById("search-box").value);
+    const location = `/getGameMode/${id}`;
+
+    //If no id is entered default to get all champions
+    if (id == "") {
+        getAllGameModes();
+        return;
+    }
+
+    mode = await makeRequest("GET", modePath + location, "")
+        .then(data => {
+            return data;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+    displayData(mode, "deleteGameMode", "editGameMode", "newGameMode");
+}

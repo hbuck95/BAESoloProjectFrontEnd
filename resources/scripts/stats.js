@@ -95,38 +95,14 @@ function getStat(id) {
 
 //Setup the new stat input screen
 async function newStat() {
-    let champions = [];
-    let gameModes = [];
 
     await getAllChampions(false).then(champs => {
-        champions = JSON.parse(champs);
+        populateOptionList(newChampionSelector, JSON.parse(champs));
     });
 
     await getAllGameModes(false).then(modes => {
-        gameModes = JSON.parse(modes);
+        populateOptionList(newGamemodeSelector, JSON.parse(modes));
     })
-
-    if (newChampionSelector.options.length != champions.length) {
-        newChampionSelector.length = 0;
-
-        for (let c of champions) {
-            let selection = document.createElement("option");
-            selection.setAttribute("id", c.id);
-            selection.text = c.name;
-            newChampionSelector.add(selection);
-        }
-    }
-
-    if (newGamemodeSelector.options.length != gameModes.length) {
-        newGamemodeSelector.options.length = 0;
-
-        for (let m of gameModes) {
-            let selection = document.createElement("option");
-            selection.setAttribute("id", m.id);
-            selection.text = m.name;
-            newGamemodeSelector.add(selection);
-        }
-    }
 
     document.getElementById("new-submit-btn").addEventListener("click", function () { saveNewStats(); });
 }
@@ -182,36 +158,30 @@ async function editStat(id) {
         banrateInput.value = selectedStat.banRate;
     }), 1000
 
-    let champions = [];
-    let gameModes = [];
-
     await getAllChampions(false).then(champs => {
-        champions = JSON.parse(champs);
+        populateOptionList(championSelector, JSON.parse(champs));
     });
 
     await getAllGameModes(false).then(modes => {
-        gameModes = JSON.parse(modes);
-    })
+        populateOptionList(gamemodeSelector, JSON.parse(modes));
+    });
 
-    populateOptionList(championSelector, champions);
-    populateOptionList(gamemodeSelector, gameModes);
-
-   //Select the current champion by default
-        for (let i = 0; i < championSelector.options.length; i++) {
-            if ((championSelector.options[i].id) == selectedStat.champion.id) {
-                console.log("found it");
-                championSelector.selectedIndex = i;
-                break;
-            }
+    //Select the current champion by default
+    for (let i = 0; i < championSelector.options.length; i++) {
+        if ((championSelector.options[i].id) == selectedStat.champion.id) {
+            console.log("found it");
+            championSelector.selectedIndex = i;
+            break;
         }
+    }
 
-     //Select the current game mode by default
-        for (let i = 0; i < gamemodeSelector.options.length; i++) {
-            if ((gamemodeSelector.options[i].id) == selectedStat.gameMode.id) {
-                gamemodeSelector.selectedIndex = i;
-                break;
-            }
-        }       
+    //Select the current game mode by default
+    for (let i = 0; i < gamemodeSelector.options.length; i++) {
+        if ((gamemodeSelector.options[i].id) == selectedStat.gameMode.id) {
+            gamemodeSelector.selectedIndex = i;
+            break;
+        }
+    }
 
     document.getElementById("submit-btn").addEventListener("click", function () { updateStat(); });
 }

@@ -47,6 +47,7 @@ function deleteStat(id) {
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
+            window.location.reload();
         })
         .catch(error => {
             console.log(error);
@@ -78,9 +79,7 @@ async function displayStat() {
 
 //Retrieve a particular record from the database
 function getStat(id) {
-
     id = id === undefined ? document.getElementById("search-box").value : id;
-
     const location = `/getStats/${id}`;
 
     makeRequest("GET", statPath + location, "")
@@ -95,7 +94,6 @@ function getStat(id) {
 
 //Setup the new stat input screen
 async function newStat() {
-
     await getAllChampions(false).then(champs => {
         populateOptionList(newChampionSelector, JSON.parse(champs));
     });
@@ -148,7 +146,6 @@ async function saveNewStats() {
 
 //Setup the edit record form
 async function editStat(id) {
-
     getStat(id);
 
     setTimeout(() => {

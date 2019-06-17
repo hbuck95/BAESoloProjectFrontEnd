@@ -1,5 +1,8 @@
 const api = "http://localhost:8080/BAESoloProject/api";
 
+let idInput = document.getElementById("id"); //Used by each entity and so declare once in a shared class.
+
+
 //Populate an options list with the provided data
 //Refactored into own method due to wide usage
 function populateOptionList(optionList, dataArray) {
@@ -31,6 +34,10 @@ async function makeRequest(method, url, body) {
     });
 }
 
+function camelCaseToString(input){
+    return input.charAt(0).toUpperCase() + input.slice(1).replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
+}
+
 /*
 data - the data to display
 delFunc - the function for deleting records
@@ -47,8 +54,8 @@ function displayData(data, delFunc, upFunc, newFunc) {
     Array.isArray(parsedData) ? entity = entity.concat(parsedData) : entity.push(parsedData);
 
     //Sort the data by id, occassionally if mutliple actions happen quickly the database does not send the records in order.
-    entity.sort(function (a, b) { 
-        return a.id - b.id 
+    entity.sort(function (a, b) {
+        return a.id - b.id
     });
 
     //If the table already exists remove it
@@ -66,7 +73,7 @@ function displayData(data, delFunc, upFunc, newFunc) {
     //Create table headers using an objects   
     for (let key of Object.keys(entity[0])) {
         let cell = document.createElement("th");
-        cell.innerHTML = "<b>" + key + "</b>";
+        cell.innerHTML = "<b>" + camelCaseToString(key) + "</b>";
         head.appendChild(cell);
     }
 
@@ -90,7 +97,7 @@ function displayData(data, delFunc, upFunc, newFunc) {
     //Attach the table to the document
     document.getElementById("data-table").appendChild(table);
 
-    //Start appending the data
+    //Start appending the data 
     let body = table.createTBody();
 
     //Create table rows

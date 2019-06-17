@@ -1,7 +1,6 @@
 const path = "/champion";
 let selectedChampion;
 
-let idInput = document.getElementById("id");
 let nameInput = document.getElementById("name");
 let hpInput = document.getElementById("hp");
 let damageInput = document.getElementById("damage");
@@ -35,7 +34,6 @@ async function getAllChampions(display = true) {
         );
 
     return result;
-
 }
 
 async function displayChampion() {
@@ -62,11 +60,8 @@ async function displayChampion() {
 }
 
 function getChampion(id) {
-
     id = id === undefined ? document.getElementById("search-box").value : id;
-
     const location = `/getChampion/${id}`;
-    console.log("Get champion");
 
     makeRequest("GET", path + location, "")
         .then(data => {
@@ -75,12 +70,10 @@ function getChampion(id) {
         })
         .catch(error => {
             console.log(error);
-        }
-        );
+        });
 }
 
 async function editChamp(id) {
-
     getChampion(id);
 
     setTimeout(() => {
@@ -148,15 +141,15 @@ function deleteChamp(id) {
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
+            window.location.reload();
         })
         .catch(error => {
+            console.log(error);
             window.alert("You can't delete this record as there are stats that rely on it!\nPlease delete the stats associated with this champion first.");
-        }
-        );
+        });
 }
 
 function updateChamp() {
-
     if (!window.confirm("Are you sure you want to update this record?")) {
         return;
     }
@@ -195,11 +188,6 @@ function updateChamp() {
 }
 
 async function newChamp() {
-
-    let pantheons = [];
-    let roles = [];
-    let damageTypes = [];
-
     await getAllPantheons(false).then(panths => {
         populateOptionList(newPantheonSelector, JSON.parse(panths));
     });

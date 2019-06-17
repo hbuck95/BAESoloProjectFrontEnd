@@ -13,7 +13,7 @@
     <title>SMITE - Game Modes</title>
 </head>
 
-<body onload="getAllGameModes()">
+<body onload="getDamageTypes()">
     <h1>Game Modes</h1>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">BAE Solo Project</a>
@@ -28,9 +28,9 @@
                 <a class="nav-item nav-link" href="stats.html">Stats</a>
                 <a class="nav-item nav-link" href="roles.html">Roles</a>
                 <a class="nav-item nav-link" href="pantheons.html">Pantheons</a>
-                <a class="nav-item nav-link active" href="gamemodes.html">Game Modes <span
+                <a class="nav-item nav-link" href="gamemodes.html">Game Modes</a>
+                <a class="nav-item nav-link active" href="damagetypes.html">Damage Types <span
                         class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" href="damagetypes.html">Damage Types</a>
             </div>
         </div>
     </nav>
@@ -39,9 +39,9 @@
     <div class="input-group mb-3">
         <input type="text" class="form-control" id="search-box" placeholder="Search by id (e.g. '1')">
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" onclick="displayGameMode()" type="button"
+            <button class="btn btn-outline-secondary" onclick="displayDamageType()" type="button"
                 id="button-addon2">Search</button>
-            <button class="btn btn-outline-secondary" onclick="getAllGameModes()" type="button">View All</button>
+            <button class="btn btn-outline-secondary" onclick="getDamageTypes()" type="button">View All</button>
         </div>
     </div>
 
@@ -84,7 +84,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Name:</span>
                         </div>
-                        <input type="text" id="gamemode-name" class="form-control" placeholder="Name">
+                        <input type="text" id="dmgtype-name" class="form-control" placeholder="Name">
                     </div>
 
 
@@ -116,10 +116,10 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Name:</span>
                         </div>
-                        <input type="text" id="new-gamemode-name" class="form-control" placeholder="Name">
+                        <input type="text" id="new-dmgtype-name" class="form-control" placeholder="Name">
                     </div>
                     <br>
-                    <button type="button" id="new-submit-btn" onclick="newGameMode()"
+                    <button type="button" id="new-submit-btn" onclick="newDamageType()"
                         class="btn btn-primary">Submit</button>
                 </div>
                 <div class="modal-footer">
@@ -144,12 +144,7 @@
 
     <!-- Other scripts -->
     <script src="resources/scripts/utility.js"></script>
-    <script src="resources/scripts/champions.js"></script>
-    <script src="resources/scripts/pantheon.js"></script>
-    <script src="resources/scripts/role.js"></script>
     <script src="resources/scripts/damagetype.js"></script>
-    <script src="resources/scripts/stats.js"></script>
-    <script src="resources/scripts/gamemodes.js"></script>
 </body>
 
 </html>

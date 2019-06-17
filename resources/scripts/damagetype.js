@@ -96,3 +96,23 @@ function updateDamageType() {
             console.log(error);
         });
 }
+
+
+function deleteDamageType(id) {
+    const location = `/deleteDamageType/${id}`;
+
+    if (!window.confirm("Are you sure you want to delete this record?")) {
+        return;
+    }
+
+    makeRequest("DELETE", dmgPath + location, "")
+        .then(resp => {
+            const response = JSON.parse(resp);
+            window.alert(response.message);
+            window.location.reload();
+        })
+        .catch(error => {
+            console.log(error);
+            window.alert("You can't delete this record as there are other records that rely on it!\nPlease delete the champions associated with this damage type first.");
+        });
+}

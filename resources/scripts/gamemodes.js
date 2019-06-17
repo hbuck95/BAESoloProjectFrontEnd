@@ -2,7 +2,7 @@ const modePath = "/gamemode";
 let selectedGameMode;
 
 let gameModeNameInput = document.getElementById("gamemode-name");
-let newgameModeNameInput = document.getElementById("new-gamemode-name");
+let newGameModeNameInput = document.getElementById("new-gamemode-name");
 
 async function getAllGameModes(display = true) {
     const location = "/getAllGameModes"
@@ -21,7 +21,6 @@ async function getAllGameModes(display = true) {
         });
 
     return result;
-
 }
 
 async function displayGameMode() {
@@ -92,4 +91,27 @@ function updateGameMode() {
         .catch(error => {
             console.log(error);
         });
+}
+
+async function newGameMode() {
+    const location = '/createGameMode';
+
+    newGameModeNameInput.focus();
+    newGameModeNameInput.select();
+
+    document.getElementById("new-submit-btn").addEventListener("click", async function () {
+
+        let newMode = {
+            "name": `${newGameModeNameInput.value}`
+        };
+
+        console.log(newPantheon);
+
+        await makeRequest("POST", modePath + location, JSON.stringify(newMode)).then(response => {
+            let reply = JSON.parse(response);
+            alert(reply.message);
+            window.location.reload();
+        }).catch(error => console.log(error));
+
+    });
 }

@@ -18,8 +18,7 @@ async function getAllPantheons(display = true) {
         })
         .catch(error => {
             console.log(error);
-        }
-        );
+        });
 
     return result;
 
@@ -59,8 +58,7 @@ function getPantheon(id) {
         })
         .catch(error => {
             console.log(error);
-        }
-        );
+        });
 }
 
 async function editPantheon(id) {
@@ -109,6 +107,7 @@ function deletePantheon(id) {
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
+            window.location.reload();
         })
         .catch(error => {
             console.log(error);

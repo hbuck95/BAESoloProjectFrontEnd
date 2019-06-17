@@ -192,7 +192,6 @@ function updateChamp() {
             console.log(error);
         }
         );
-
 }
 
 async function newChamp() {
@@ -202,20 +201,16 @@ async function newChamp() {
     let damageTypes = [];
 
     await getAllPantheons(false).then(panths => {
-        pantheons = JSON.parse(panths);
+        populateOptionList(newPantheonSelector, JSON.parse(panths));
     });
 
     await getAllRoles(false).then(r => {
-        roles = JSON.parse(r);
+        populateOptionList(newRoleSelector, JSON.parse(r));
     });
 
     await getDamageTypes(false).then(dts => {
-        damageTypes = JSON.parse(dts);
+        populateOptionList(newDamageSelector, JSON.parse(dts));
     });
-
-    populateOptionList(newPantheonSelector, pantheons);
-    populateOptionList(newRoleSelector, roles);
-    populateOptionList(newDamageSelector, damageTypes);
 
     document.getElementById("new-submit-btn").addEventListener("click", function () { saveNewChamp(); });
 }
@@ -247,8 +242,6 @@ async function saveNewChamp() {
         "health": newHpInput.value,
         "damage": newDamageInput.value
     };
-
-    console.log(champ);
 
     await makeRequest("POST", path + location, JSON.stringify(champ)).then(response => {
         let reply = JSON.parse(response);

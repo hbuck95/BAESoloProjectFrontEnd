@@ -41,8 +41,7 @@ async function displayPantheon() {
         })
         .catch(error => {
             console.log(error);
-        }
-        );
+        });
 
     displayData(panth, "deletePantheon", "editPantheon", "newPantheon");
 }
@@ -96,9 +95,7 @@ function updatePantheon() {
         })
         .catch(error => {
             console.log(error);
-        }
-        );
-
+        });
 }
 
 function deletePantheon(id) {
@@ -114,9 +111,9 @@ function deletePantheon(id) {
             window.alert(response.message);
         })
         .catch(error => {
+            console.log(error);
             window.alert("You can't delete this record as there are other records that rely on it!\nPlease delete the champions associated with this pantheon first.");
-        }
-        );
+        });
 }
 
 async function newPantheon() {

@@ -4,7 +4,7 @@ const api = "http://localhost:8080/BAESoloProject/api";
 //Refactored into own method due to wide usage
 function populateOptionList(optionList, dataArray) {
     if (optionList.options.length != dataArray.length) {
-        optionList.options.length = 0; //If there are not equal reset it as there could a DB entry change
+        optionList.options.length = 0; //If they are not equal then remove all options and repopulate it as there could a DB entry change
 
         for (let data of dataArray) {
             let option = document.createElement("option");
@@ -16,13 +16,11 @@ function populateOptionList(optionList, dataArray) {
 }
 
 async function makeRequest(method, url, body) {
-    console.log("Making new promise");
     return new Promise((res, rej) => {
         const req = new XMLHttpRequest();
         req.open(method, api + url);
 
         req.onload = () => {
-            console.log("On load");
             if (req.status >= 200 && req.status < 300) {
                 res(req.responseText);
             } else {
@@ -33,6 +31,12 @@ async function makeRequest(method, url, body) {
     });
 }
 
+/*
+data - the data to display
+delFunc - the function for deleting records
+upFunc - the function for updating records
+newFunc - the function for creating new records
+*/
 function displayData(data, delFunc, upFunc, newFunc) {
     let entity = []; //Reset this variable
 
@@ -49,7 +53,6 @@ function displayData(data, delFunc, upFunc, newFunc) {
 
     //If the table already exists remove it
     if (!!table) {
-        console.log("table exists");
         document.getElementById("data-table").removeChild(table);
     }
 
@@ -72,7 +75,7 @@ function displayData(data, delFunc, upFunc, newFunc) {
     headCell.innerHTML = "<b>Actions</b>";
     head.appendChild(headCell);
 
-    //New record button creation
+    //New record button creation and insertion
     let newBtn = document.createElement("button");
     headCell = document.createElement("th");
     newBtn.setAttribute("class", "btn btn-primary new-btn");
@@ -117,7 +120,6 @@ function displayData(data, delFunc, upFunc, newFunc) {
             }
 
             cell.append(document.createTextNode(textToAppend));
-
         }
 
         cell = row.insertCell();
@@ -127,7 +129,6 @@ function displayData(data, delFunc, upFunc, newFunc) {
         //if so the elements for editing/deleting do not need to be drawn.
         if (data.includes("message"))
             return;
-
 
         //edit button creation for each record
         let editBtn = document.createElement("button");
@@ -152,7 +153,5 @@ function displayData(data, delFunc, upFunc, newFunc) {
         editBtn.setAttribute("data-toggle", "modal");
         editBtn.setAttribute("data-target", "#myModal");
         delBtn.setAttribute("onclick", `${delFunc}(${delBtn.parentElement.id})`);
-
-
     });
 }

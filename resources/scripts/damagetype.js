@@ -41,4 +41,16 @@ async function displayDamageType() {
     displayData(data, "deleteDamageType", "editDamageType", "newDamageType");
 }
 
+function getDamageType(id) {
+    id = id === undefined ? document.getElementById("search-box").value : id;
+    const location = `/getDamageType/${id}`;
 
+    makeRequest("GET", dmgPath + location, "")
+        .then(data => {
+            selectedDamageType = JSON.parse(data);
+            return data;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}

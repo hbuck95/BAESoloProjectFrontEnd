@@ -116,3 +116,26 @@ function deleteDamageType(id) {
             window.alert("You can't delete this record as there are other records that rely on it!\nPlease delete the champions associated with this damage type first.");
         });
 }
+
+async function newDamageType() {
+    const location = '/createDamageType';
+
+    newDmgTypeNameInput.focus();
+    newDmgTypeNameInput.select();
+
+    document.getElementById("new-submit-btn").addEventListener("click", async function () {
+
+        let newDamageType = {
+            "name": `${newDmgTypeNameInput.value}`
+        };
+
+        console.log(newDamageType);
+
+        await makeRequest("POST", dmgPath + location, JSON.stringify(newDamageType)).then(response => {
+            let reply = JSON.parse(response);
+            alert(reply.message);
+            window.location.reload();
+        }).catch(error => console.log(error));
+
+    });
+}

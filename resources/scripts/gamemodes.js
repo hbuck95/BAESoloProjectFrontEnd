@@ -42,3 +42,17 @@ async function displayGameMode() {
 
     displayData(mode, "deleteGameMode", "editGameMode", "newGameMode");
 }
+
+function getGameMode(id) {
+    id = id === undefined ? document.getElementById("search-box").value : id;
+    const location = `/getGameMode/${id}`;
+
+    makeRequest("GET", modePath + location, "")
+        .then(data => {
+            selectedGameMode = JSON.parse(data);
+            return data;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}

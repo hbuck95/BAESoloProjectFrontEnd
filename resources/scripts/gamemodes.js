@@ -1,6 +1,9 @@
 const modePath = "/gamemode";
 let selectedGameMode;
 
+let gameModeNameInput = document.getElementById("gamemode-name");
+let newgameModeNameInput = document.getElementById("new-gamemode-name");
+
 async function getAllGameModes(display = true) {
     const location = "/getAllGameModes"
     let result = "";
@@ -15,8 +18,7 @@ async function getAllGameModes(display = true) {
         })
         .catch(error => {
             console.log(error);
-        }
-        );
+        });
 
     return result;
 
@@ -51,6 +53,41 @@ function getGameMode(id) {
         .then(data => {
             selectedGameMode = JSON.parse(data);
             return data;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+async function editGameMode(id) {
+    getGameMode(id);
+
+    setTimeout(() => {
+        idInput.value = id;
+        gameModeNameInput.value = selectedGameMode.name;
+    }), 1000
+
+    document.getElementById("submit-btn").addEventListener("click", function () { updateGameMode(); });
+}
+
+function updateGameMode() {
+
+    if (!window.confirm("Are you sure you want to update this record?")) {
+        return;
+    }
+
+    const location = `/updateGameMode/${idInput.value}`;
+
+    let updatedRecord = {
+        "id": idInput.value,
+        "name": `${gameModeNameInput.value}`
+    };
+
+    makeRequest("PUT", modePath + location, JSON.stringify(updatedRecord))
+        .then(resp => {
+            const response = JSON.parse(resp);
+            window.alert(response.message);
+            window.location.reload();
         })
         .catch(error => {
             console.log(error);

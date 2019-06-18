@@ -1,4 +1,4 @@
-const api = "http://localhost:8080/BAESoloProject/api";
+const api = "/BAESoloProject/api";
 
 let idInput = document.getElementById("id"); //Used by each entity and so declare once in a shared class.
 

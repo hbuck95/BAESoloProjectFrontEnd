@@ -44,22 +44,25 @@ async function displayGameMode() {
     displayData(mode, "deleteGameMode", "editGameMode", "newGameMode");
 }
 
-function getGameMode(id) {
+async function getGameMode(id) {
     id = id === undefined ? document.getElementById("search-box").value : id;
     const location = `/getGameMode/${id}`;
+    let result = "";
 
     makeRequest("GET", modePath + location, "")
         .then(data => {
             selectedGameMode = JSON.parse(data);
-            return data;
+            result = data;
+            return result;
         })
         .catch(error => {
             console.log(error);
         });
+    return result;
 }
 
 async function editGameMode(id) {
-    getGameMode(id);
+    let mode = await getGameMode(id);
 
     setTimeout(() => {
         idInput.value = id;

@@ -74,18 +74,13 @@ function getChampion(id) {
 }
 
 async function editChamp(id) {
-    getChampion(id);
-
-    setTimeout(() => {
-        idInput.value = id;
-        nameInput.value = selectedChampion.name;
-        hpInput.value = selectedChampion.health;
-        damageInput.value = selectedChampion.damage;
-    }), 1000
-
     let pantheons = [];
     let roles = [];
     let damageTypes = [];
+
+    await getAllChampions(false).then(champs => {
+        selectedChampion = JSON.parse(champs).filter(champion => champion.id == id)[0];
+    });
 
     await getAllPantheons(false).then(panths => {
         pantheons = JSON.parse(panths);
@@ -98,6 +93,11 @@ async function editChamp(id) {
     await getDamageTypes(false).then(dts => {
         damageTypes = JSON.parse(dts);
     });
+
+    idInput.value = id;
+    nameInput.value = selectedChampion.name;
+    hpInput.value = selectedChampion.health;
+    damageInput.value = selectedChampion.damage;
 
     populateOptionList(pantheonSelector, pantheons);
     populateOptionList(roleSelector, roles);

@@ -44,30 +44,30 @@ async function displayGameMode() {
     displayData(mode, "deleteGameMode", "editGameMode", "newGameMode");
 }
 
-async function getGameMode(id) {
+function getGameMode(id) {
     id = id === undefined ? document.getElementById("search-box").value : id;
     const location = `/getGameMode/${id}`;
-    let result = "";
 
     makeRequest("GET", modePath + location, "")
         .then(data => {
             selectedGameMode = JSON.parse(data);
-            result = data;
-            return result;
+            return data;
         })
         .catch(error => {
             console.log(error);
         });
-    return result;
 }
 
 async function editGameMode(id) {
-    let mode = await getGameMode(id);
 
-    setTimeout(() => {
-        idInput.value = id;
-        gameModeNameInput.value = selectedGameMode.name;
-    }), 1000
+    await (getAllGameModes(false)).then(modes => {
+        selectedGameMode = JSON.parse(modes).filter(x => x.id == id)[0];
+    });
+
+
+    idInput.value = id;
+    gameModeNameInput.value = selectedGameMode.name;
+
 
     document.getElementById("submit-btn").addEventListener("click", function () { updateGameMode(); });
 }

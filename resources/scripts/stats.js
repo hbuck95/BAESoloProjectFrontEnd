@@ -82,7 +82,7 @@ async function getStat(id) {
     const LOCATION = `/getStats/${id}`;
     let result = "";
 
-    makeRequest("GET", STAT_PATH + LOCATION, "")
+    await makeRequest("GET", STAT_PATH + LOCATION, "")
         .then(data => {
             result = data;
             return result;

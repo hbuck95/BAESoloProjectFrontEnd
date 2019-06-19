@@ -64,7 +64,7 @@ async function getChampion(id) {
     const LOCATION = `/getChampion/${id}`;
     let result = "";
 
-    makeRequest("GET", CHAMPION_PATH + LOCATION, "")
+    await makeRequest("GET", CHAMPION_PATH + LOCATION, "")
         .then(data => {
             result = data;
             return result;

@@ -48,7 +48,7 @@ async function getGameMode(id) {
     const LOCATION = `/getGameMode/${id}`;
     let result = "";
 
-    makeRequest("GET", MODE_PATH + LOCATION, "")
+    await makeRequest("GET", MODE_PATH + LOCATION, "")
         .then(data => {
             result = data;
             return result;

@@ -49,7 +49,7 @@ async function getPantheon(id) {
     const LOCATION = `/getPantheon/${id}`;
     let result = "";
 
-    makeRequest("GET", PANTH_PATH + LOCATION, "")
+    await makeRequest("GET", PANTH_PATH + LOCATION, "")
         .then(data => {
             result = data;
             return result;

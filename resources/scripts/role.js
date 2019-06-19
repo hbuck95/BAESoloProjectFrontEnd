@@ -52,7 +52,7 @@ async function getRole(id) {
     const LOCATION = `/getRole/${id}`;
     let result = "";
 
-    makeRequest("GET", ROLE_PATH + LOCATION, "")
+    await makeRequest("GET", ROLE_PATH + LOCATION, "")
         .then(data => {
             result = data;
             return result;

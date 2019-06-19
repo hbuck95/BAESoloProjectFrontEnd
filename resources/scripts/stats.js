@@ -1,4 +1,4 @@
-const statPath = "/stats";
+const STAT_PATH = "/stats";
 let selectedStat;
 
 //Edit record input fields
@@ -17,10 +17,10 @@ let newBanrateInput = document.getElementById("newbanrate");
 
 //Retrieve all stat records from the database
 async function getAllStats(display = true) {
-    const location = "/getAllStats"
+    const LOCATION = "/getAllStats"
     let result = "";
 
-    await makeRequest("GET", statPath + location, "")
+    await makeRequest("GET", STAT_PATH + LOCATION, "")
         .then(data => {
             if (display) {
                 displayData(data, "deleteStat", "editStat", "newStat");
@@ -37,13 +37,13 @@ async function getAllStats(display = true) {
 
 //Delete a record
 function deleteStat(id) {
-    const location = `/deleteStats/${id}`;
+    const LOCATION = `/deleteStats/${id}`;
 
     if (!window.confirm("Are you sure you want to delete this record?")) {
         return;
     }
 
-    makeRequest("DELETE", statPath + location, "")
+    makeRequest("DELETE", STAT_PATH + LOCATION, "")
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -58,7 +58,7 @@ function deleteStat(id) {
 //Get an individual record to display
 async function displayStat() {
     id = (document.getElementById("search-box").value);
-    const location = `/getStats/${id}`;
+    const LOCATION = `/getStats/${id}`;
 
     //If no id is entered default to get all champions
     if (id == "") {
@@ -66,7 +66,7 @@ async function displayStat() {
         return;
     }
 
-    let stat = await makeRequest("GET", statPath + location, "")
+    let stat = await makeRequest("GET", STAT_PATH + LOCATION, "")
         .then(data => {
             return data;
         })
@@ -79,17 +79,18 @@ async function displayStat() {
 
 //Retrieve a particular record from the database
 function getStat(id) {
-    id = id === undefined ? document.getElementById("search-box").value : id;
-    const location = `/getStats/${id}`;
+    const LOCATION = `/getStats/${id}`;
+    let result = "";
 
-    makeRequest("GET", statPath + location, "")
+    makeRequest("GET", STAT_PATH + LOCATION, "")
         .then(data => {
-            selectedStat = JSON.parse(data);
-            return data;
+            result = data;
+            return result;
         })
         .catch(error => {
             console.log(error);
         });
+    return result;
 }
 
 //Setup the new stat input screen
@@ -118,7 +119,7 @@ async function saveNewStats() {
     let champions = [];
     let gameModes = [];
 
-    const location = '/createStats';
+    const LOCATION = '/createStats';
 
     await getAllChampions(false).then(champs => {
         champions = JSON.parse(champs);
@@ -136,7 +137,7 @@ async function saveNewStats() {
     stat.champion = updatedChamp[0];
     stat.gameMode = updatedMode[0];
 
-    await makeRequest("POST", statPath + location, JSON.stringify(stat)).then(response => {
+    await makeRequest("POST", STAT_PATH + LOCATION, JSON.stringify(stat)).then(response => {
         let reply = JSON.parse(response);
         alert(reply.message);
         window.location.reload();
@@ -146,14 +147,15 @@ async function saveNewStats() {
 
 //Setup the edit record form
 async function editStat(id) {
-    getStat(id);
 
-    setTimeout(() => {
-        idInput.value = id;
-        winrateInput.value = selectedStat.winRate;
-        pickrateInput.value = selectedStat.pickRate;
-        banrateInput.value = selectedStat.banRate;
-    }), 1000
+    await getStat(id).then(stat => {
+        selectedStat = JSON.parse(stat);
+    });
+
+    idInput.value = id;
+    winrateInput.value = selectedStat.winRate;
+    pickrateInput.value = selectedStat.pickRate;
+    banrateInput.value = selectedStat.banRate;
 
     await getAllChampions(false).then(champs => {
         populateOptionList(championSelector, JSON.parse(champs));
@@ -190,7 +192,7 @@ async function updateStat() {
         return;
     }
 
-    const location = `/updateStats/${idInput.value}`;
+    const LOCATION = `/updateStats/${idInput.value}`;
 
     let champions = [];
     let gameModes = [];
@@ -215,7 +217,7 @@ async function updateStat() {
     updatedRecord.banRate = banrateInput.value;
     updatedRecord.pickRate = pickrateInput.value;
 
-    makeRequest("PUT", statPath + location, JSON.stringify(updatedRecord))
+    makeRequest("PUT", STAT_PATH + LOCATION, JSON.stringify(updatedRecord))
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -223,6 +225,5 @@ async function updateStat() {
         })
         .catch(error => {
             console.log(error);
-        }
-        );
+        });
 }

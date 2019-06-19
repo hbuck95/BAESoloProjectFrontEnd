@@ -1,5 +1,4 @@
-const panthPath = "/pantheon";
-let selectedPantheon;
+const PANTH_PATH = "/pantheon";
 
 let pantheonNameInput = document.getElementById("pantheon-name");
 let newPantheonNameInput = document.getElementById("new-pantheon-name");
@@ -8,7 +7,7 @@ async function getAllPantheons(display = true) {
     const location = "/getAllPantheons"
     let result = "";
 
-    await makeRequest("GET", panthPath + location, "")
+    await makeRequest("GET", PANTH_PATH + location, "")
         .then(data => {
             if (display) {
                 displayData(data, "deletePantheon", "editPantheon", "newPantheon");
@@ -34,7 +33,7 @@ async function displayPantheon() {
         return;
     }
 
-    panth = await makeRequest("GET", panthPath + location, "")
+    panth = await makeRequest("GET", PANTH_PATH + location, "")
         .then(data => {
             return data;
         })
@@ -45,29 +44,29 @@ async function displayPantheon() {
     displayData(panth, "deletePantheon", "editPantheon", "newPantheon");
 }
 
+//Retrieve a particular record from the database
 function getPantheon(id) {
-
-    id = id === undefined ? document.getElementById("search-box").value : id;
-
     const location = `/getPantheon/${id}`;
+    let result = "";
 
-    makeRequest("GET", panthPath + location, "")
+    makeRequest("GET", PANTH_PATH + LOCATION, "")
         .then(data => {
-            selectedPantheon = JSON.parse(data);
-            return data;
+            result = data;
+            return result;
         })
         .catch(error => {
             console.log(error);
         });
+    return result;
 }
 
 async function editPantheon(id) {
-    getPantheon(id);
 
-    setTimeout(() => {
+    await (getPantheon(id)).then(panth => {
+        let selectedPantheon = JSON.parse(panth);
         idInput.value = id;
         pantheonNameInput.value = selectedPantheon.name;
-    }), 1000
+    });
 
     document.getElementById("submit-btn").addEventListener("click", function () { updatePantheon(); });
 }
@@ -85,7 +84,7 @@ function updatePantheon() {
         "name": `${pantheonNameInput.value}`
     };
 
-    makeRequest("PUT", panthPath + location, JSON.stringify(updatedRecord))
+    makeRequest("PUT", PANTH_PATH + location, JSON.stringify(updatedRecord))
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -103,7 +102,7 @@ function deletePantheon(id) {
         return;
     }
 
-    makeRequest("DELETE", panthPath + location, "")
+    makeRequest("DELETE", PANTH_PATH + location, "")
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -129,7 +128,7 @@ async function newPantheon() {
 
         console.log(newPantheon);
 
-        await makeRequest("POST", panthPath + location, JSON.stringify(newPantheon)).then(response => {
+        await makeRequest("POST", PANTH_PATH + location, JSON.stringify(newPantheon)).then(response => {
             let reply = JSON.parse(response);
             alert(reply.message);
             window.location.reload();

@@ -1,4 +1,4 @@
-const path = "/champion";
+const CHAMPION_PATH = "/champion";
 let selectedChampion;
 
 let nameInput = document.getElementById("name");
@@ -17,10 +17,10 @@ let newDamageSelector = document.getElementById("new-damage-selection");
 
 
 async function getAllChampions(display = true) {
-    const location = "/getAllChampions"
+    const LOCATION = "/getAllChampions"
     let result = "";
 
-    await makeRequest("GET", path + location, "")
+    await makeRequest("GET", CHAMPION_PATH + LOCATION, "")
         .then(data => {
             if (display) {
                 displayData(data, "deleteChamp", "editChamp", "newChamp");
@@ -38,7 +38,7 @@ async function getAllChampions(display = true) {
 
 async function displayChampion() {
     id = (document.getElementById("search-box").value);
-    const location = `/getChampion/${id}`;
+    const LOCATION = `/getChampion/${id}`;
 
     //If no id is entered default to get all champions
     if (id == "") {
@@ -46,7 +46,7 @@ async function displayChampion() {
         return;
     }
 
-    champ = await makeRequest("GET", path + location, "")
+    champ = await makeRequest("GET", CHAMPION_PATH + LOCATION, "")
         .then(data => {
             return data;
         })
@@ -59,18 +59,20 @@ async function displayChampion() {
     displayData(champ, "deleteChamp", "editChamp", "newChamp");
 }
 
+//Retrieve a particular record from the database
 function getChampion(id) {
-    id = id === undefined ? document.getElementById("search-box").value : id;
-    const location = `/getChampion/${id}`;
+    const LOCATION = `/getChampion/${id}`;
+    let result = "";
 
-    makeRequest("GET", path + location, "")
+    makeRequest("GET", CHAMPION_PATH + LOCATION, "")
         .then(data => {
-            selectedChampion = JSON.parse(data);
-            return data;
+            result = data;
+            return result;
         })
         .catch(error => {
             console.log(error);
         });
+    return result;
 }
 
 async function editChamp(id) {
@@ -78,10 +80,9 @@ async function editChamp(id) {
     let roles = [];
     let damageTypes = [];
 
-    await getAllChampions(false).then(champs => {
-        selectedChampion = JSON.parse(champs).filter(champion => champion.id == id)[0];
+    await(getChampion(id)).then(champ => {
+        selectedChampion = JSON.parse(champ);
     });
-
     await getAllPantheons(false).then(panths => {
         pantheons = JSON.parse(panths);
     });
@@ -131,13 +132,13 @@ async function editChamp(id) {
 }
 
 function deleteChamp(id) {
-    const location = `/deleteChampion/${id}`;
+    const LOCATION = `/deleteChampion/${id}`;
 
     if (!window.confirm("Are you sure you want to delete this record?")) {
         return;
     }
 
-    makeRequest("DELETE", path + location, "")
+    makeRequest("DELETE", CHAMPION_PATH + LOCATION, "")
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -175,7 +176,7 @@ function updateChamp() {
         "damage": `${damageInput.value}`
     };
 
-    makeRequest("PUT", path + location, JSON.stringify(updatedRecord))
+    makeRequest("PUT", CHAMPION_PATH + location, JSON.stringify(updatedRecord))
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -204,7 +205,7 @@ async function newChamp() {
 }
 
 async function saveNewChamp() {
-    const location = '/createChampion';
+    const LOCATION = '/createChampion';
 
     let pantheons = [];
     let roles = [];
@@ -231,7 +232,7 @@ async function saveNewChamp() {
         "damage": newDamageInput.value
     };
 
-    await makeRequest("POST", path + location, JSON.stringify(champ)).then(response => {
+    await makeRequest("POST", CHAMPION_PATH + LOCATION, JSON.stringify(champ)).then(response => {
         let reply = JSON.parse(response);
         alert(reply.message);
         window.location.reload();

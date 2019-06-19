@@ -128,7 +128,7 @@ async function newDamageType() {
             "name": `${newDmgTypeNameInput.value}`
         };
 
-        console.log(newDamageType);
+        //console.log(newDamageType);
 
         await makeRequest("POST", DMG_PATH + LOCATION, JSON.stringify(newDamageType)).then(response => {
             let reply = JSON.parse(response);

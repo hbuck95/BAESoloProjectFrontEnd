@@ -4,10 +4,10 @@ let gameModeNameInput = document.getElementById("gamemode-name");
 let newGameModeNameInput = document.getElementById("new-gamemode-name");
 
 async function getAllGameModes(display = true) {
-    const location = "/getAllGameModes"
+    const LOCATION = "/getAllGameModes"
     let result = "";
 
-    await makeRequest("GET", MODE_PATH + location, "")
+    await makeRequest("GET", MODE_PATH + LOCATION, "")
         .then(data => {
             if (display) {
                 displayData(data, "deleteGameMode", "editGameMode", "newGameMode");
@@ -24,7 +24,7 @@ async function getAllGameModes(display = true) {
 
 async function displayGameMode() {
     id = (document.getElementById("search-box").value);
-    const location = `/getGameMode/${id}`;
+    const LOCATION = `/getGameMode/${id}`;
 
     //If no id is entered default to get all champions
     if (id == "") {
@@ -32,7 +32,7 @@ async function displayGameMode() {
         return;
     }
 
-    mode = await makeRequest("GET", MODE_PATH + location, "")
+    mode = await makeRequest("GET", MODE_PATH + LOCATION, "")
         .then(data => {
             return data;
         })
@@ -44,8 +44,8 @@ async function displayGameMode() {
 }
 
 //Retrieve a particular record from the database
-function getGameMode(id) {
-    const location = `/getGameMode/${id}`;
+async function getGameMode(id) {
+    const LOCATION = `/getGameMode/${id}`;
     let result = "";
 
     makeRequest("GET", MODE_PATH + LOCATION, "")
@@ -75,14 +75,14 @@ function updateGameMode() {
         return;
     }
 
-    const location = `/updateGameMode/${idInput.value}`;
+    const LOCATION = `/updateGameMode/${idInput.value}`;
 
     let updatedRecord = {
         "id": idInput.value,
         "name": `${gameModeNameInput.value}`
     };
 
-    makeRequest("PUT", MODE_PATH + location, JSON.stringify(updatedRecord))
+    makeRequest("PUT", MODE_PATH + LOCATION, JSON.stringify(updatedRecord))
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -94,7 +94,7 @@ function updateGameMode() {
 }
 
 async function newGameMode() {
-    const location = '/createGameMode';
+    const LOCATION = '/createGameMode';
 
     newGameModeNameInput.focus();
     newGameModeNameInput.select();
@@ -107,7 +107,7 @@ async function newGameMode() {
 
         console.log(newPantheon);
 
-        await makeRequest("POST", MODE_PATH + location, JSON.stringify(newMode)).then(response => {
+        await makeRequest("POST", MODE_PATH + LOCATION, JSON.stringify(newMode)).then(response => {
             let reply = JSON.parse(response);
             alert(reply.message);
             window.location.reload();
@@ -117,13 +117,13 @@ async function newGameMode() {
 }
 
 function deleteGameMode(id) {
-    const location = `/deleteGameMode/${id}`;
+    const LOCATION = `/deleteGameMode/${id}`;
 
     if (!window.confirm("Are you sure you want to delete this record?")) {
         return;
     }
 
-    makeRequest("DELETE", MODE_PATH + location, "")
+    makeRequest("DELETE", MODE_PATH + LOCATION, "")
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);

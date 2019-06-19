@@ -78,7 +78,7 @@ async function displayStat() {
 }
 
 //Retrieve a particular record from the database
-function getStat(id) {
+async function getStat(id) {
     const LOCATION = `/getStats/${id}`;
     let result = "";
 

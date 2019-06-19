@@ -5,10 +5,10 @@ let roleNameInput = document.getElementById("role-name");
 let newRoleNameInput = document.getElementById("new-role-name");
 
 async function getAllRoles(display = true) {
-    const location = "/getAllRoles"
+    const LOCATION = "/getAllRoles"
     let result = "";
 
-    await makeRequest("GET", ROLE_PATH + location, "")
+    await makeRequest("GET", ROLE_PATH + LOCATION, "")
         .then(data => {
             if (display) {
                 displayData(data, "deleteRole", "editRole", "newRole");
@@ -26,7 +26,7 @@ async function getAllRoles(display = true) {
 }
 
 async function displayRole() {
-    id = (document.getElementById("search-box").value);
+    let id = (document.getElementById("search-box").value);
     const LOCATION = `/getRole/${id}`;
 
     //If no id is entered default to get all champions
@@ -48,7 +48,7 @@ async function displayRole() {
 
 
 //Retrieve a particular record from the database
-function getRole(id) {
+async function getRole(id) {
     const LOCATION = `/getRole/${id}`;
     let result = "";
 
@@ -64,7 +64,7 @@ function getRole(id) {
 }
 
 async function editRole(id) {
-    await (getRole(id)).then(role => {
+    await getRole(id).then(role => {
         let selectedRole = JSON.parse(role);
         idInput.value = id;
         roleNameInput.value = selectedRole.name;

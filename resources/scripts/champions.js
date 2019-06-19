@@ -60,7 +60,7 @@ async function displayChampion() {
 }
 
 //Retrieve a particular record from the database
-function getChampion(id) {
+async function getChampion(id) {
     const LOCATION = `/getChampion/${id}`;
     let result = "";
 
@@ -80,7 +80,7 @@ async function editChamp(id) {
     let roles = [];
     let damageTypes = [];
 
-    await(getChampion(id)).then(champ => {
+    await getChampion(id).then(champ => {
         selectedChampion = JSON.parse(champ);
     });
     await getAllPantheons(false).then(panths => {

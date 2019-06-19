@@ -130,7 +130,6 @@ function displayData(data, delFunc, upFunc, newFunc) {
         }
 
         cell = row.insertCell();
-        cell.setAttribute("id", element["id"]);
 
         //message is the name of the property in any response from the server that is a confirmation of success/error
         //if so the elements for editing/deleting do not need to be drawn.

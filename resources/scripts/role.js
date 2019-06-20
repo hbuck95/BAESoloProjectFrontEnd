@@ -1,14 +1,14 @@
-const rolePath = "/role";
+const ROLE_PATH = "/role";
 let selectedRole;
 
 let roleNameInput = document.getElementById("role-name");
 let newRoleNameInput = document.getElementById("new-role-name");
 
 async function getAllRoles(display = true) {
-    const location = "/getAllRoles"
+    const LOCATION = "/getAllRoles"
     let result = "";
 
-    await makeRequest("GET", rolePath + location, "")
+    await makeRequest("GET", ROLE_PATH + LOCATION, "")
         .then(data => {
             if (display) {
                 displayData(data, "deleteRole", "editRole", "newRole");
@@ -26,8 +26,8 @@ async function getAllRoles(display = true) {
 }
 
 async function displayRole() {
-    id = (document.getElementById("search-box").value);
-    const location = `/getRole/${id}`;
+    let id = (document.getElementById("search-box").value);
+    const LOCATION = `/getRole/${id}`;
 
     //If no id is entered default to get all champions
     if (id == "") {
@@ -35,43 +35,40 @@ async function displayRole() {
         return;
     }
 
-    let role = await makeRequest("GET", rolePath + location, "")
+    let role = await makeRequest("GET", ROLE_PATH + LOCATION, "")
         .then(data => {
             return data;
         })
         .catch(error => {
             console.log(error);
-        }
-        );
+        });
 
     displayData(role, "deleteRole", "editRole", "newRole");
 }
 
 
-function getRole(id) {
+//Retrieve a particular record from the database
+async function getRole(id) {
+    const LOCATION = `/getRole/${id}`;
+    let result = "";
 
-    id = id === undefined ? document.getElementById("search-box").value : id;
-
-    const location = `/getRole/${id}`;
-
-    makeRequest("GET", rolePath + location, "")
+    await makeRequest("GET", ROLE_PATH + LOCATION, "")
         .then(data => {
-            selectedRole = JSON.parse(data);
-            return data;
+            result = data;
+            return result;
         })
         .catch(error => {
             console.log(error);
-        }
-        );
+        });
+    return result;
 }
 
 async function editRole(id) {
-    getRole(id);
-
-    setTimeout(() => {
+    await getRole(id).then(role => {
+        let selectedRole = JSON.parse(role);
         idInput.value = id;
         roleNameInput.value = selectedRole.name;
-    }), 1000
+    });
 
     document.getElementById("submit-btn").addEventListener("click", function () { updateRole(); });
 }
@@ -82,14 +79,14 @@ function updateRole() {
         return;
     }
 
-    const location = `/updateRole/${idInput.value}`;
+    const LOCATION = `/updateRole/${idInput.value}`;
 
     let updatedRecord = {
         "id": idInput.value,
         "name": `${roleNameInput.value}`
     };
 
-    makeRequest("PUT", rolePath + location, JSON.stringify(updatedRecord))
+    makeRequest("PUT", ROLE_PATH + LOCATION, JSON.stringify(updatedRecord))
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -102,13 +99,13 @@ function updateRole() {
 }
 
 function deleteRole(id) {
-    const location = `/deleteRole/${id}`;
+    const LOCATION = `/deleteRole/${id}`;
 
     if (!window.confirm("Are you sure you want to delete this record?")) {
         return;
     }
 
-    makeRequest("DELETE", rolePath + location, "")
+    makeRequest("DELETE", ROLE_PATH + LOCATION, "")
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -120,7 +117,7 @@ function deleteRole(id) {
 }
 
 async function newRole() {
-    const location = '/createRole';
+    const LOCATION = '/createRole';
 
     newRoleNameInput.focus();
     newRoleNameInput.select();
@@ -133,7 +130,7 @@ async function newRole() {
 
         console.log(newRole);
 
-        await makeRequest("POST", rolePath + location, JSON.stringify(newRole)).then(response => {
+        await makeRequest("POST", ROLE_PATH + LOCATION, JSON.stringify(newRole)).then(response => {
             let reply = JSON.parse(response);
             alert(reply.message);
             window.location.reload();

@@ -1,14 +1,14 @@
-const dmgPath = "/damagetype";
+const DMG_PATH = "/damagetype";
 let selectedDamageType;
 
 let dmgTypeNameInput = document.getElementById("dmgtype-name");
 let newDmgTypeNameInput = document.getElementById("new-dmgtype-name");
 
 async function getDamageTypes(display = true) {
-    const location = "/getAllDamageTypes"
+    const LOCATION = "/getAllDamageTypes"
     let result = "";
 
-    await makeRequest("GET", dmgPath + location, "")
+    await makeRequest("GET", DMG_PATH + LOCATION, "")
         .then(data => {
             if (display) {
                 displayData(data, "deleteDamageType", "editDamageType", "newDamageType");
@@ -25,7 +25,7 @@ async function getDamageTypes(display = true) {
 
 async function displayDamageType() {
     id = (document.getElementById("search-box").value);
-    const location = `/getDamageType/${id}`;
+    const LOCATION = `/getDamageType/${id}`;
 
     //If no id is entered default to get all damage types
     if (id == "") {
@@ -33,7 +33,7 @@ async function displayDamageType() {
         return;
     }
 
-    data = await makeRequest("GET", dmgPath + location, "")
+    data = await makeRequest("GET", DMG_PATH + LOCATION, "")
         .then(data => {
             return data;
         })
@@ -45,11 +45,10 @@ async function displayDamageType() {
 }
 
 async function getDamageType(id) {
-    id = id === undefined ? document.getElementById("search-box").value : id;
-    const location = `/getDamageType/${id}`;
+    const LOCATION = `/getDamageType/${id}`;
     let result = "";
 
-    await makeRequest("GET", dmgPath + location, "")
+    await makeRequest("GET", DMG_PATH + LOCATION, "")
         .then(data => {
             selectedDamageType = JSON.parse(data);
             result = data;
@@ -86,7 +85,7 @@ function updateDamageType() {
         "name": `${dmgTypeNameInput.value}`
     };
 
-    makeRequest("PUT", dmgPath + location, JSON.stringify(updatedRecord))
+    makeRequest("PUT", DMG_PATH + location, JSON.stringify(updatedRecord))
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -99,13 +98,13 @@ function updateDamageType() {
 
 
 function deleteDamageType(id) {
-    const location = `/deleteDamageType/${id}`;
+    const LOCATION = `/deleteDamageType/${id}`;
 
     if (!window.confirm("Are you sure you want to delete this record?")) {
         return;
     }
 
-    makeRequest("DELETE", dmgPath + location, "")
+    makeRequest("DELETE", DMG_PATH + LOCATION, "")
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -118,7 +117,7 @@ function deleteDamageType(id) {
 }
 
 async function newDamageType() {
-    const location = '/createDamageType';
+    const LOCATION = '/createDamageType';
 
     newDmgTypeNameInput.focus();
     newDmgTypeNameInput.select();
@@ -129,9 +128,9 @@ async function newDamageType() {
             "name": `${newDmgTypeNameInput.value}`
         };
 
-        console.log(newDamageType);
+        //console.log(newDamageType);
 
-        await makeRequest("POST", dmgPath + location, JSON.stringify(newDamageType)).then(response => {
+        await makeRequest("POST", DMG_PATH + LOCATION, JSON.stringify(newDamageType)).then(response => {
             let reply = JSON.parse(response);
             alert(reply.message);
             window.location.reload();

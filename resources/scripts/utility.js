@@ -1,4 +1,4 @@
-const api = "http://34.77.62.121:8888/BAESoloProject/api";
+const API = "http://34.77.62.121:8888/BAESoloProject/api";
 
 let idInput = document.getElementById("id"); //Used by each entity and so declare once in a shared class.
 
@@ -21,7 +21,7 @@ function populateOptionList(optionList, dataArray) {
 async function makeRequest(method, url, body) {
     return new Promise((res, rej) => {
         const req = new XMLHttpRequest();
-        req.open(method, api + url);
+        req.open(method, API + url);
 
         req.onload = () => {
             if (req.status >= 200 && req.status < 300) {
@@ -130,7 +130,6 @@ function displayData(data, delFunc, upFunc, newFunc) {
         }
 
         cell = row.insertCell();
-        cell.setAttribute("id", element["id"]);
 
         //message is the name of the property in any response from the server that is a confirmation of success/error
         //if so the elements for editing/deleting do not need to be drawn.
@@ -156,9 +155,9 @@ function displayData(data, delFunc, upFunc, newFunc) {
         cell.setAttribute("colspan", "2");//merge this column with the column created from the new record button
 
         //onclick attributes for edit and delete
-        editBtn.setAttribute("onclick", `${upFunc}(${editBtn.parentElement.id});`);
+        editBtn.setAttribute("onclick", `${upFunc}(${element["id"]});`);
         editBtn.setAttribute("data-toggle", "modal");
         editBtn.setAttribute("data-target", "#myModal");
-        delBtn.setAttribute("onclick", `${delFunc}(${delBtn.parentElement.id})`);
+        delBtn.setAttribute("onclick", `${delFunc}(${element["id"]})`);
     });
 }

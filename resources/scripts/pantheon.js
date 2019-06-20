@@ -1,14 +1,13 @@
-const panthPath = "/pantheon";
-let selectedPantheon;
+const PANTH_PATH = "/pantheon";
 
 let pantheonNameInput = document.getElementById("pantheon-name");
 let newPantheonNameInput = document.getElementById("new-pantheon-name");
 
 async function getAllPantheons(display = true) {
-    const location = "/getAllPantheons"
+    const LOCATION = "/getAllPantheons"
     let result = "";
 
-    await makeRequest("GET", panthPath + location, "")
+    await makeRequest("GET", PANTH_PATH + LOCATION, "")
         .then(data => {
             if (display) {
                 displayData(data, "deletePantheon", "editPantheon", "newPantheon");
@@ -25,8 +24,8 @@ async function getAllPantheons(display = true) {
 }
 
 async function displayPantheon() {
-    id = (document.getElementById("search-box").value);
-    const location = `/getPantheon/${id}`;
+    let id = (document.getElementById("search-box").value);
+    const LOCATION = `/getPantheon/${id}`;
 
     //If no id is entered default to get all champions
     if (id == "") {
@@ -34,7 +33,7 @@ async function displayPantheon() {
         return;
     }
 
-    panth = await makeRequest("GET", panthPath + location, "")
+    let panth = await makeRequest("GET", PANTH_PATH + LOCATION, "")
         .then(data => {
             return data;
         })
@@ -45,29 +44,29 @@ async function displayPantheon() {
     displayData(panth, "deletePantheon", "editPantheon", "newPantheon");
 }
 
-function getPantheon(id) {
+//Retrieve a particular record from the database
+async function getPantheon(id) {
+    const LOCATION = `/getPantheon/${id}`;
+    let result = "";
 
-    id = id === undefined ? document.getElementById("search-box").value : id;
-
-    const location = `/getPantheon/${id}`;
-
-    makeRequest("GET", panthPath + location, "")
+    await makeRequest("GET", PANTH_PATH + LOCATION, "")
         .then(data => {
-            selectedPantheon = JSON.parse(data);
-            return data;
+            result = data;
+            return result;
         })
         .catch(error => {
             console.log(error);
         });
+    return result;
 }
 
 async function editPantheon(id) {
-    getPantheon(id);
 
-    setTimeout(() => {
+    await getPantheon(id).then(panth => {
+        let selectedPantheon = JSON.parse(panth);
         idInput.value = id;
         pantheonNameInput.value = selectedPantheon.name;
-    }), 1000
+    });
 
     document.getElementById("submit-btn").addEventListener("click", function () { updatePantheon(); });
 }
@@ -78,14 +77,14 @@ function updatePantheon() {
         return;
     }
 
-    const location = `/updatePantheon/${idInput.value}`;
+    const LOCATION = `/updatePantheon/${idInput.value}`;
 
     let updatedRecord = {
         "id": idInput.value,
         "name": `${pantheonNameInput.value}`
     };
 
-    makeRequest("PUT", panthPath + location, JSON.stringify(updatedRecord))
+    makeRequest("PUT", PANTH_PATH + LOCATION, JSON.stringify(updatedRecord))
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -97,13 +96,13 @@ function updatePantheon() {
 }
 
 function deletePantheon(id) {
-    const location = `/deletePantheon/${id}`;
+    const LOCATION = `/deletePantheon/${id}`;
 
     if (!window.confirm("Are you sure you want to delete this record?")) {
         return;
     }
 
-    makeRequest("DELETE", panthPath + location, "")
+    makeRequest("DELETE", PANTH_PATH + LOCATION, "")
         .then(resp => {
             const response = JSON.parse(resp);
             window.alert(response.message);
@@ -116,7 +115,7 @@ function deletePantheon(id) {
 }
 
 async function newPantheon() {
-    const location = '/createPantheon';
+    const LOCATION = '/createPantheon';
 
     newPantheonNameInput.focus();
     newPantheonNameInput.select();
@@ -129,7 +128,7 @@ async function newPantheon() {
 
         console.log(newPantheon);
 
-        await makeRequest("POST", panthPath + location, JSON.stringify(newPantheon)).then(response => {
+        await makeRequest("POST", PANTH_PATH + LOCATION, JSON.stringify(newPantheon)).then(response => {
             let reply = JSON.parse(response);
             alert(reply.message);
             window.location.reload();
